@@ -1,0 +1,734 @@
+<!-- ... existing code ... -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCD Travel - Perceived Quality Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bcd: {
+                            blue: '#002244',
+                            lightBlue: '#0066B2',
+                            accent: '#3B82F6',
+                            bgDark: '#0f172a',
+                            cardDark: '#1e293b',
+                            borderDark: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        /* Tooltip style */
+        .chart-tooltip {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            transform: translate(-50%, -100%);
+            z-index: 50;
+        }
+
+        /* HARD-OVERRIDE & HIDE TIINY.HOST INJECTED BANNER */
+        div[style*="tiiny"],
+        div[class*="tiiny"],
+        a[href*="tiiny.host"],
+        div[style*="position: fixed"][style*="bottom: 0"],
+        div[style*="position:fixed"][style*="bottom:0"],
+        div[style*="z-index: 999999"],
+        iframe[src*="tiiny.host"],
+        body > div:last-child:not(#app-wrapper) {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            pointer-events: none !important;
+        }
+
+        /* Clip bottom of screen to ensure floating footers can't bleed through */
+        html, body {
+            overflow: hidden !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased h-screen overflow-hidden text-xs flex flex-col">
+
+    <!-- Anti-Tiiny.host Cover Barrier at absolute bottom -->
+    <div class="fixed bottom-0 left-0 right-0 h-1 bg-slate-900 z-[9999999] pointer-events-none"></div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app-wrapper" class="flex-1 flex flex-col h-full overflow-hidden relative">
+
+        <!-- INTERNAL HEADER (Collapsible for Embed Mode) -->
+        <header id="internal-header" class="bg-slate-950/90 border-b border-slate-800 px-3 py-1.5 flex items-center justify-between shrink-0 transition-all duration-300">
+            <div class="flex items-center gap-2">
+                <button id="sidebar-toggle-btn" onclick="toggleSidebar()" class="p-1 text-slate-400 hover:text-white rounded bg-slate-800/50 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-bars text-xs"></i>
+                </button>
+                <div class="flex items-center gap-1.5">
+                    <span class="bg-blue-600 text-white font-bold text-[10px] px-1.5 py-0.5 rounded tracking-wider">BCD</span>
+                    <span class="font-bold text-xs text-slate-200 tracking-tight">BCD Travel</span>
+                </div>
+            </div>
+
+            <!-- Compact Search Bar -->
+            <div class="flex-1 max-w-xs mx-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]"></i>
+                    <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Buscar métrica o filtro..." class="w-full bg-slate-900 border border-slate-700/80 rounded-md pl-7 pr-3 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- EMBED FIT MODE TOGGLE -->
+                <button onclick="toggleEmbedFitMode()" id="embed-toggle-btn" class="flex items-center gap-1 bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-600/50 text-[10px] px-2 py-0.5 rounded-md font-medium transition" title="Ocultar barras redundantes para ganar espacio en FocalScope">
+                    <i class="fa-solid fa-compress text-[10px]"></i>
+                    <span id="embed-toggle-text">Modo Embebido</span>
+                </button>
+
+                <div class="h-3 w-px bg-slate-800"></div>
+
+                <div class="flex items-center gap-1 text-slate-400">
+                    <button class="p-1 hover:text-slate-200 transition"><i class="fa-solid fa-sun text-[11px]"></i></button>
+                    <button class="p-1 hover:text-slate-200 transition relative">
+                        <i class="fa-solid fa-bell text-[11px]"></i>
+                        <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                    </button>
+                    <button class="p-1 hover:text-slate-200 transition"><i class="fa-solid fa-circle-question text-[11px]"></i></button>
+                </div>
+                <div class="flex items-center gap-1.5 ml-1 bg-slate-800/60 px-1.5 py-0.5 rounded-full border border-slate-700/50">
+                    <div class="w-4 h-4 rounded-full bg-blue-600 flex items-center justify-center font-bold text-[9px]">A</div>
+                    <span class="text-[10px] font-semibold text-slate-300">ADMIN1</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT CONTAINER (Sidebar + Main View) -->
+        <div class="flex-1 flex overflow-hidden">
+
+            <!-- SIDEBAR (Collapsible for tight integration) -->
+            <aside id="internal-sidebar" class="w-44 bg-slate-950/70 border-r border-slate-800/80 flex flex-col shrink-0 transition-all duration-300 overflow-y-auto">
+                <div class="p-2 space-y-3">
+                    <a href="#" class="flex items-center gap-2 text-slate-300 hover:text-white px-2 py-1 rounded hover:bg-slate-800/50 text-[11px] font-medium">
+                        <i class="fa-solid fa-house text-slate-400 text-xs w-4"></i>
+                        <span>Inicio</span>
+                    </a>
+
+                    <div>
+                        <div class="px-2 text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Marcadores</div>
+                        <nav class="space-y-0.5">
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-regular fa-envelope text-xs w-4"></i>
+                                <span>Email Analytics</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-solid fa-square-poll-vertical text-xs w-4"></i>
+                                <span>Survey Analytics</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-solid fa-ticket text-xs w-4"></i>
+                                <span>Ticket Analytics</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-solid fa-phone text-xs w-4"></i>
+                                <span>Telephony Analytics</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div>
+                        <div class="px-2 text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Colecciones</div>
+                        <nav class="space-y-0.5">
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-solid fa-chart-pie text-xs w-4"></i>
+                                <span>Ops Analytics</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-regular fa-star text-xs w-4"></i>
+                                <span>Colección personal</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-semibold">
+                                <i class="fa-solid fa-chart-line text-xs w-4"></i>
+                                <span>Perceived Quality</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 text-[10px]">
+                                <i class="fa-brands fa-whatsapp text-xs w-4"></i>
+                                <span>WhatsApp Analytics</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA (Compact Grid view) -->
+            <main class="flex-1 bg-slate-900 p-2.5 overflow-y-auto flex flex-col gap-2 relative">
+
+                <!-- DASHBOARD TITLE HEADER -->
+                <div class="flex items-center justify-between shrink-0">
+                    <div>
+                        <div class="text-[9px] font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1">
+                            <span>CUSTOMER EXPERIENCE</span>
+                            <span class="text-slate-600">•</span>
+                            <span>ANALYTICS</span>
+                        </div>
+                        <h1 class="text-base font-bold text-white tracking-tight leading-none mt-0.5">Perceived Quality Dashboard</h1>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div id="live-indicator" class="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 px-2 py-0.5 rounded-full text-[10px] text-slate-300">
+                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <span class="font-medium">Datos en tiempo real</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPACT FILTERS ROW -->
+                <div class="bg-slate-800/40 border border-slate-800 rounded-lg p-1.5 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-1">Filtrar por</span>
+
+                        <!-- Period Dropdown -->
+                        <div class="relative">
+                            <select id="filter-period" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-200 px-2 py-0.5 pr-5 focus:outline-none focus:border-blue-500 cursor-pointer appearance-none">
+                                <option value="6m">Período: Últimos 6 meses</option>
+                                <option value="3m">Período: Últimos 3 meses</option>
+                                <option value="30d">Período: Últimos 30 días</option>
+                                <option value="ytd">Período: Año actual (YTD)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-slate-400 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Touchpoint Dropdown -->
+                        <div class="relative">
+                            <select id="filter-touchpoint" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-200 px-2 py-0.5 pr-5 focus:outline-none focus:border-blue-500 cursor-pointer appearance-none">
+                                <option value="all">Todos los Touchpoints</option>
+                                <option value="post-viaje" selected>Post-viaje</option>
+                                <option value="atencion">Atención al cliente</option>
+                                <option value="reserva">Proceso de Reserva</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-slate-400 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Channel Dropdown -->
+                        <div class="relative">
+                            <select id="filter-channel" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-200 px-2 py-0.5 pr-5 focus:outline-none focus:border-blue-500 cursor-pointer appearance-none">
+                                <option value="all">Todos los Canales</option>
+                                <option value="telefono">Teléfono</option>
+                                <option value="email">Email</option>
+                                <option value="chat">Chat / Web</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-slate-400 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Team Dropdown -->
+                        <div class="relative">
+                            <select id="filter-team" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-200 px-2 py-0.5 pr-5 focus:outline-none focus:border-blue-500 cursor-pointer appearance-none">
+                                <option value="all">Todos los Equipos</option>
+                                <option value="Equipo A">Equipo A</option>
+                                <option value="Equipo B">Equipo B</option>
+                                <option value="Equipo C" selected>Equipo C</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <button onclick="resetFilters()" class="text-[10px] text-blue-400 hover:text-blue-300 font-medium px-2 py-0.5 hover:bg-slate-800 rounded transition flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left text-[9px]"></i> Restablecer
+                    </button>
+                </div>
+
+                <!-- 5 COMPACT KPI CARDS ROW -->
+                <div class="grid grid-cols-5 gap-2 shrink-0">
+
+                    <!-- KPI 1 -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-2 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
+                        <div class="flex items-center justify-between text-slate-400">
+                            <span class="text-[10px] font-medium leading-tight">Encuestas enviadas</span>
+                            <i class="fa-solid fa-paper-plane text-[9px] text-blue-400"></i>
+                        </div>
+                        <div class="my-1">
+                            <span id="kpi-sent" class="text-xl font-extrabold text-white tracking-tight">27</span>
+                        </div>
+                        <span class="text-[9px] text-slate-400">Volumen total del período</span>
+                    </div>
+
+                    <!-- KPI 2 -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-2 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
+                        <div class="flex items-center justify-between text-slate-400">
+                            <span class="text-[10px] font-medium leading-tight">Encuestas respondidas</span>
+                            <i class="fa-solid fa-check text-[9px] text-emerald-400"></i>
+                        </div>
+                        <div class="my-1">
+                            <span id="kpi-received" class="text-xl font-extrabold text-white tracking-tight">21</span>
+                        </div>
+                        <span class="text-[9px] text-slate-400">Respuestas recibidas</span>
+                    </div>
+
+                    <!-- KPI 3 (CSAT) -->
+                    <div class="bg-slate-800/60 border border-blue-500/40 rounded-lg p-2 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/60 transition bg-gradient-to-b from-blue-950/20 to-transparent">
+                        <div class="flex items-center justify-between text-slate-300">
+                            <span class="text-[10px] font-semibold leading-tight">Satisfacción media (CSAT)</span>
+                            <i class="fa-solid fa-star text-[9px] text-yellow-400"></i>
+                        </div>
+                        <div class="my-1 flex items-baseline gap-1">
+                            <span id="kpi-csat" class="text-xl font-extrabold text-white tracking-tight">59.5%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                            <span id="kpi-csat-status" class="text-red-400 font-semibold">Atención requerida</span>
+                            <span class="text-slate-400">en satisfacción</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4 (Detractores) -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-2 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
+                        <div class="flex items-center justify-between text-slate-400">
+                            <span class="text-[10px] font-medium leading-tight">Número de detractores</span>
+                            <i class="fa-solid fa-triangle-exclamation text-[9px] text-amber-400"></i>
+                        </div>
+                        <div class="my-1">
+                            <span id="kpi-detractors" class="text-xl font-extrabold text-white tracking-tight">4</span>
+                        </div>
+                        <span class="text-[9px] text-slate-400">Puntuación NPS de 0 a 6</span>
+                    </div>
+
+                    <!-- KPI 5 (Tasa Respuesta) -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-2 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
+                        <div class="flex items-center justify-between text-slate-400">
+                            <span class="text-[10px] font-medium leading-tight">Tasa de respuesta</span>
+                            <i class="fa-solid fa-chart-pie text-[9px] text-indigo-400"></i>
+                        </div>
+                        <div class="my-1">
+                            <span id="kpi-response-rate" class="text-xl font-extrabold text-white tracking-tight">77.0%</span>
+                        </div>
+                        <span id="kpi-response-detail" class="text-[9px] text-slate-400">21 respuestas de 27 envíos</span>
+                    </div>
+
+                </div>
+
+                <!-- CHARTS GRID (Strict Height Optimized) -->
+                <div class="grid grid-cols-2 gap-2 flex-1 min-h-0">
+
+                    <!-- CHART 1: NPS & SENTIMENT DISTRIBUTION -->
+                    <div class="bg-slate-800/50 border border-slate-800 rounded-lg p-2.5 flex flex-col justify-between relative">
+                        <div class="flex items-center justify-between mb-1 shrink-0">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-100 leading-tight">Distribución de NPS y sentimiento</h3>
+                                <p class="text-[9px] text-slate-400">Respuestas por puntuación (0–10)</p>
+                            </div>
+                            <button onclick="exportChart('chart1')" class="text-[9px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded transition">
+                                Exportar <i class="fa-solid fa-download text-[8px] ml-0.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="flex items-center gap-3 text-[9px] mb-1 text-slate-300 shrink-0">
+                            <div class="flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-sm bg-rose-500"></span>
+                                <span>Detractores (0-6)</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-sm bg-amber-500"></span>
+                                <span>Pasivos (7-8)</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-sm bg-emerald-500"></span>
+                                <span>Promotores (9-10)</span>
+                            </div>
+                        </div>
+
+                        <!-- SVG Bar Chart Canvas -->
+                        <div class="flex-1 w-full relative min-h-[120px]" id="bar-chart-container">
+                            <svg id="bar-chart-svg" class="w-full h-full overflow-visible"></svg>
+                        </div>
+                    </div>
+
+                    <!-- CHART 2: EVOLUTION TREND -->
+                    <div class="bg-slate-800/50 border border-slate-800 rounded-lg p-2.5 flex flex-col justify-between relative">
+                        <div class="flex items-center justify-between mb-1 shrink-0">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-100 leading-tight">Evolución de NPS y CSAT</h3>
+                                <p class="text-[9px] text-slate-400">Tendencia mensual - período seleccionado</p>
+                            </div>
+                            <button onclick="exportChart('chart2')" class="text-[9px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded transition">
+                                Exportar <i class="fa-solid fa-download text-[8px] ml-0.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="flex items-center gap-3 text-[9px] mb-1 text-slate-300 shrink-0">
+                            <div class="flex items-center gap-1">
+                                <span class="w-2.5 h-0.5 bg-rose-500"></span>
+                                <span>NPS %</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="w-2.5 h-0.5 bg-blue-500"></span>
+                                <span>CSAT %</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="w-2.5 h-0.5 bg-amber-400"></span>
+                                <span>Promotores %</span>
+                            </div>
+                        </div>
+
+                        <!-- SVG Line Chart Canvas -->
+                        <div class="flex-1 w-full relative min-h-[120px]" id="line-chart-container">
+                            <svg id="line-chart-svg" class="w-full h-full overflow-visible"></svg>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- REUSABLE TOOLTIP -->
+    <div id="tooltip" class="chart-tooltip bg-slate-950 text-white border border-slate-700 rounded-md p-1.5 shadow-xl text-[10px] whitespace-nowrap">
+        <div id="tooltip-title" class="font-bold text-slate-200 border-b border-slate-800 pb-0.5 mb-1"></div>
+        <div id="tooltip-body" class="space-y-0.5 text-slate-300"></div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA MODEL
+        const mockData = {
+            sent: 27,
+            received: 21,
+            csat: 59.5,
+            detractors: 4,
+            passives: 5,
+            promoters: 12,
+            npsDistribution: [0, 1, 0, 1, 1, 1, 0, 2, 3, 5, 7], // 0-10 scale counts
+            trendMonths: ['May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct'],
+            trendCSAT: [52, 55, 58, 62, 57, 59.5],
+            trendNPS: [15, 20, 28, 35, 30, 38],
+            trendPromoters: [40, 45, 50, 58, 52, 57]
+        };
+
+        let embedFitActive = false;
+
+        window.onload = function() {
+            renderBarChart();
+            renderLineChart();
+            window.addEventListener('resize', () => {
+                renderBarChart();
+                renderLineChart();
+            });
+
+            // ANTI-TIINY HOST DOM OBSERVER & CLEANER
+            cleanTiinyHostBanners();
+            setInterval(cleanTiinyHostBanners, 500);
+        };
+
+        // Aggressively remove any element injected by Tiiny.host
+        function cleanTiinyHostBanners() {
+            const selectors = [
+                'a[href*="tiiny.host"]',
+                'div[style*="position: fixed"]',
+                'div[style*="position:fixed"]',
+                'iframe[src*="tiiny.host"]',
+                '#tiiny-host-banner'
+            ];
+
+            selectors.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => {
+                    if (el.id !== 'app-wrapper') {
+                        el.remove();
+                    }
+                });
+            });
+
+            // Ensure body overflow stays hidden
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Toggle Embed Fit Mode (hides redundant sidebar & topbar)
+        function toggleEmbedFitMode() {
+            const sidebar = document.getElementById('internal-sidebar');
+            const header = document.getElementById('internal-header');
+            const btnText = document.getElementById('embed-toggle-text');
+
+            embedFitActive = !embedFitActive;
+
+            if (embedFitActive) {
+                sidebar.classList.add('hidden');
+                header.classList.add('py-0.5');
+                btnText.textContent = "Mostrar Completo";
+            } else {
+                sidebar.classList.remove('hidden');
+                header.classList.remove('py-0.5');
+                btnText.textContent = "Modo Embebido";
+            }
+
+            // Re-render charts after transition to update SVG dimensions
+            setTimeout(() => {
+                renderBarChart();
+                renderLineChart();
+            }, 200);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('internal-sidebar');
+            sidebar.classList.toggle('hidden');
+            setTimeout(() => {
+                renderBarChart();
+                renderLineChart();
+            }, 200);
+        }
+
+        function applyFilters() {
+            // Re-calculate mock values based on filters
+            const period = document.getElementById('filter-period').value;
+            const mult = period === '3m' ? 0.6 : (period === '30d' ? 0.25 : 1);
+
+            const sent = Math.round(mockData.sent * mult);
+            const rec = Math.round(mockData.received * mult);
+            const rate = ((rec / sent) * 100).toFixed(1);
+
+            document.getElementById('kpi-sent').textContent = sent;
+            document.getElementById('kpi-received').textContent = rec;
+            document.getElementById('kpi-response-rate').textContent = rate + '%';
+            document.getElementById('kpi-response-detail').textContent = `${rec} respuestas de ${sent} envíos`;
+
+            renderBarChart();
+            renderLineChart();
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-period').value = '6m';
+            document.getElementById('filter-touchpoint').value = 'post-viaje';
+            document.getElementById('filter-channel').value = 'telefono';
+            document.getElementById('filter-team').value = 'Equipo C';
+            applyFilters();
+        }
+
+        // RENDER SVG BAR CHART (NPS Distribution)
+        function renderBarChart() {
+            const container = document.getElementById('bar-chart-container');
+            const svg = document.getElementById('bar-chart-svg');
+            if (!container || !svg) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            svg.innerHTML = '';
+
+            const paddingLeft = 20;
+            const paddingBottom = 18;
+            const paddingTop = 10;
+            const paddingRight = 10;
+
+            const chartW = width - paddingLeft - paddingRight;
+            const chartH = height - paddingTop - paddingBottom;
+
+            const data = mockData.npsDistribution;
+            const maxVal = Math.max(...data, 8);
+            const barGap = 4;
+            const barWidth = (chartW / data.length) - barGap;
+
+            // Render Horizontal Gridlines
+            [0, 0.5, 1].forEach(ratio => {
+                const y = paddingTop + chartH * (1 - ratio);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', paddingLeft);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', width - paddingRight);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#334155');
+                line.setAttribute('stroke-dasharray', '2,2');
+                svg.appendChild(line);
+            });
+
+            // Render Bars
+            data.forEach((val, i) => {
+                const x = paddingLeft + i * (barWidth + barGap) + barGap/2;
+                const barH = (val / maxVal) * chartH;
+                const y = paddingTop + (chartH - barH);
+
+                let color = '#f43f5e'; // Detractor (Red)
+                if (i >= 7 && i <= 8) color = '#f59e0b'; // Passive (Amber)
+                if (i >= 9) color = '#10b981'; // Promoter (Green)
+
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', x);
+                rect.setAttribute('y', y);
+                rect.setAttribute('width', Math.max(1, barWidth));
+                rect.setAttribute('height', Math.max(2, barH));
+                rect.setAttribute('fill', color);
+                rect.setAttribute('rx', '2');
+                rect.setAttribute('class', 'transition-all duration-300 hover:opacity-80 cursor-pointer');
+
+                // Hover Tooltip
+                rect.addEventListener('mouseenter', (e) => showTooltip(e, `Score: ${i}`, `Respuestas: <b class="text-white">${val}</b>`));
+                rect.addEventListener('mouseleave', hideTooltip);
+
+                svg.appendChild(rect);
+
+                // X-Axis Labels
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x + barWidth / 2);
+                text.setAttribute('y', height - 3);
+                text.setAttribute('fill', '#94a3b8');
+                text.setAttribute('font-size', '8');
+                text.setAttribute('text-anchor', 'middle');
+                text.textContent = i;
+                svg.appendChild(text);
+            });
+        }
+
+        // RENDER SVG LINE CHART (Trend)
+        function renderLineChart() {
+            const container = document.getElementById('line-chart-container');
+            const svg = document.getElementById('line-chart-svg');
+            if (!container || !svg) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            svg.innerHTML = '';
+
+            const paddingLeft = 22;
+            const paddingBottom = 18;
+            const paddingTop = 10;
+            const paddingRight = 10;
+
+            const chartW = width - paddingLeft - paddingRight;
+            const chartH = height - paddingTop - paddingBottom;
+
+            const months = mockData.trendMonths;
+            const csat = mockData.trendCSAT;
+            const nps = mockData.trendNPS;
+
+            // Render Horizontal Gridlines
+            [0, 0.5, 1].forEach((ratio, idx) => {
+                const y = paddingTop + chartH * (1 - ratio);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', paddingLeft);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', width - paddingRight);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#334155');
+                line.setAttribute('stroke-dasharray', '2,2');
+                svg.appendChild(line);
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', paddingLeft - 3);
+                label.setAttribute('y', y + 3);
+                label.setAttribute('fill', '#64748b');
+                label.setAttribute('font-size', '7');
+                label.setAttribute('text-anchor', 'end');
+                label.textContent = `${Math.round(ratio * 100)}%`;
+                svg.appendChild(label);
+            });
+
+            // Generate Path Points
+            const getPoints = (dataset) => {
+                return dataset.map((val, i) => {
+                    const x = paddingLeft + (i / (dataset.length - 1)) * chartW;
+                    const y = paddingTop + chartH * (1 - val / 100);
+                    return { x, y, val };
+                });
+            };
+
+            const drawSeries = (dataset, color) => {
+                const pts = getPoints(dataset);
+                const pathD = pts.reduce((acc, p, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`, '');
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', color);
+                path.setAttribute('stroke-width', '1.8');
+                svg.appendChild(path);
+
+                // Points
+                pts.forEach((p, i) => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', p.x);
+                    circle.setAttribute('cy', p.y);
+                    circle.setAttribute('r', '2.5');
+                    circle.setAttribute('fill', color);
+                    circle.setAttribute('class', 'hover:scale-150 transition-transform cursor-pointer');
+
+                    circle.addEventListener('mouseenter', (e) => showTooltip(e, months[i], `Valor: <b class="text-white">${p.val}%</b>`));
+                    circle.addEventListener('mouseleave', hideTooltip);
+
+                    svg.appendChild(circle);
+                });
+            };
+
+            drawSeries(csat, '#3b82f6'); // Blue Line (CSAT)
+            drawSeries(nps, '#f43f5e');  // Red Line (NPS)
+
+            // Render X-Axis Labels
+            months.forEach((m, i) => {
+                const x = paddingLeft + (i / (months.length - 1)) * chartW;
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', height - 3);
+                text.setAttribute('fill', '#94a3b8');
+                text.setAttribute('font-size', '8');
+                text.setAttribute('text-anchor', 'middle');
+                text.textContent = m;
+                svg.appendChild(text);
+            });
+        }
+
+        // TOOLTIP HELPER FUNCTIONS
+        function showTooltip(e, title, body) {
+            const tooltip = document.getElementById('tooltip');
+            document.getElementById('tooltip-title').innerHTML = title;
+            document.getElementById('tooltip-body').innerHTML = body;
+
+            const rect = e.target.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width / 2}px`;
+            tooltip.style.top = `${rect.top - 8}px`;
+            tooltip.style.opacity = '1';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.style.opacity = '0';
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('global-search').value.toLowerCase();
+            console.log('Filtrando dashboard por:', query);
+        }
+
+        function exportChart(chartId) {
+            alert('Exportación iniciada para ' + chartId);
+        }
+    </script>
+</body>
+</html>
