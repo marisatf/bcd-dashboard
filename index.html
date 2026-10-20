@@ -32,9 +32,13 @@
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .bar-transition { transition: height 0.4s ease, background-color 0.3s ease; }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-bcd-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-200">
+
+    <!-- FLOATING TOOLTIP -->
+    <div id="tooltip" class="fixed hidden bg-slate-900 text-white text-xs px-3 py-1.5 rounded-md shadow-xl border border-slate-700 pointer-events-none z-50 transition-opacity duration-150"></div>
 
     <!-- TOP HEADER -->
     <header class="bg-bcd-blue text-white px-6 py-3 flex justify-between items-center shadow-lg border-b border-gray-700">
@@ -85,27 +89,27 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <span class="text-xs font-bold uppercase text-gray-400 tracking-wider">FILTRAR POR:</span>
                     
-                    <select id="filterPeriod" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent">
+                    <select id="filterPeriod" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
                         <option value="6m">Período: Últimos 6 meses</option>
                         <option value="3m">Período: Últimos 3 meses</option>
                         <option value="1m">Período: Último mes</option>
                     </select>
 
-                    <select id="filterType" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent">
+                    <select id="filterType" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
                         <option value="all">Tipo: Todos</option>
                         <option value="post">Post-viaje</option>
                         <option value="phone">Atención telefónica</option>
                         <option value="vip">Gestión VIP</option>
                     </select>
 
-                    <select id="filterChannel" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent">
+                    <select id="filterChannel" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
                         <option value="all">Todos los canales</option>
                         <option value="phone">Teléfono</option>
                         <option value="email">Email</option>
                         <option value="whatsapp">WhatsApp</option>
                     </select>
 
-                    <select id="filterTeam" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent">
+                    <select id="filterTeam" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
                         <option value="all">Todos los Equipos</option>
                         <option value="multi1">Multi1</option>
                         <option value="equipoA">Equipo A</option>
@@ -114,7 +118,7 @@
                     </select>
                 </div>
 
-                <button onclick="resetDashboard()" class="text-xs text-gray-500 hover:text-bcd-accent flex items-center space-x-1">
+                <button onclick="resetDashboard()" class="text-xs text-gray-500 hover:text-bcd-accent flex items-center space-x-1 transition">
                     <i class="fa-solid fa-rotate-left"></i>
                     <span>Restablecer</span>
                 </button>
@@ -130,7 +134,7 @@
                     <i class="fa-solid fa-paper-plane text-bcd-accent text-xs"></i>
                 </div>
                 <div id="kpiEnviadas" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">184</div>
-                <div class="text-[10px] text-emerald-500 font-semibold mt-1">
+                <div id="kpiEnviadasSub" class="text-[10px] text-emerald-500 font-semibold mt-1">
                     <i class="fa-solid fa-arrow-up"></i> +12.4% vs período anterior
                 </div>
             </div>
@@ -162,7 +166,7 @@
                 </div>
                 <div id="kpiDetractores" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">2</div>
                 <div class="text-[10px] text-emerald-500 font-semibold mt-1">
-                    <i class="fa-solid fa-arrow-down"></i> -60% de incidencias
+                    <i class="fa-solid fa-arrow-down"></i> Mínimo histórico
                 </div>
             </div>
 
@@ -185,7 +189,7 @@
                 <div class="flex justify-between items-center border-b border-gray-200 dark:border-bcd-borderDark pb-3">
                     <div>
                         <h2 class="text-sm font-bold text-gray-900 dark:text-white">Distribución de NPS y sentimiento</h2>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Respuestas por puntuación (0-10)</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pasa el ratón por las barras para ver detalles</p>
                     </div>
                     <button class="text-xs text-gray-400 hover:text-white border border-gray-300 dark:border-slate-700 rounded px-2 py-1">
                         <i class="fa-solid fa-download mr-1"></i> Exportar
@@ -208,53 +212,63 @@
                     </div>
                 </div>
 
-                <!-- BARS GRAPH WITH LABELS -->
-                <div class="h-64 flex items-end justify-between gap-3 pt-8 pb-2 px-2 border-b border-gray-200 dark:border-slate-700 relative">
+                <!-- BARS GRAPH WITH DYNAMIC HOVER TOOLTIPS -->
+                <div class="h-64 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-gray-200 dark:border-slate-700 relative">
                     
                     <!-- BAR 1-6 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span id="labelBar1" class="text-[11px] font-bold text-red-400 mb-1">2</span>
-                        <div id="bar1" class="w-full bg-red-500/80 group-hover:bg-red-500 transition-all rounded-t" style="height: 6%;"></div>
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer" 
+                         onmouseenter="showTooltip(event, 'Detractores (1-6)', '2 respuestas (1.4%)')" 
+                         onmouseleave="hideTooltip()" 
+                         onmousemove="moveTooltip(event)">
+                        <div id="bar1" class="w-full bg-red-500 group-hover:bg-red-400 bar-transition rounded-t" style="height: 6%;"></div>
                         <span class="text-[10px] font-medium text-gray-400 mt-2">1-6</span>
                     </div>
 
                     <!-- BAR 7 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span id="labelBar2" class="text-[11px] font-bold text-amber-400 mb-1">8</span>
-                        <div id="bar2" class="w-full bg-amber-400/80 group-hover:bg-amber-400 transition-all rounded-t" style="height: 20%;"></div>
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
+                         onmouseenter="showTooltip(event, 'Pasivos (7)', '8 respuestas (5.6%)')" 
+                         onmouseleave="hideTooltip()" 
+                         onmousemove="moveTooltip(event)">
+                        <div id="bar2" class="w-full bg-amber-400 group-hover:bg-amber-300 bar-transition rounded-t" style="height: 22%;"></div>
                         <span class="text-[10px] font-medium text-gray-400 mt-2">7</span>
                     </div>
 
                     <!-- BAR 8 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span id="labelBar3" class="text-[11px] font-bold text-amber-400 mb-1">14</span>
-                        <div id="bar3" class="w-full bg-amber-400 group-hover:bg-amber-300 transition-all rounded-t" style="height: 35%;"></div>
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
+                         onmouseenter="showTooltip(event, 'Pasivos (8)', '14 respuestas (9.8%)')" 
+                         onmouseleave="hideTooltip()" 
+                         onmousemove="moveTooltip(event)">
+                        <div id="bar3" class="w-full bg-amber-400 group-hover:bg-amber-300 bar-transition rounded-t" style="height: 38%;"></div>
                         <span class="text-[10px] font-medium text-gray-400 mt-2">8</span>
                     </div>
 
                     <!-- BAR 9 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span id="labelBar4" class="text-[11px] font-bold text-emerald-400 mb-1">42</span>
-                        <div id="bar4" class="w-full bg-emerald-500/80 group-hover:bg-emerald-400 transition-all rounded-t" style="height: 70%;"></div>
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
+                         onmouseenter="showTooltip(event, 'Promotores (9)', '42 respuestas (29.5%)')" 
+                         onmouseleave="hideTooltip()" 
+                         onmousemove="moveTooltip(event)">
+                        <div id="bar4" class="w-full bg-emerald-500 group-hover:bg-emerald-400 bar-transition rounded-t" style="height: 72%;"></div>
                         <span class="text-[10px] font-medium text-gray-400 mt-2">9</span>
                     </div>
 
                     <!-- BAR 10 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span id="labelBar5" class="text-[11px] font-bold text-emerald-400 mb-1">76</span>
-                        <div id="bar5" class="w-full bg-emerald-500 group-hover:bg-emerald-400 transition-all rounded-t" style="height: 95%;"></div>
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
+                         onmouseenter="showTooltip(event, 'Promotores (10)', '76 respuestas (53.5%)')" 
+                         onmouseleave="hideTooltip()" 
+                         onmousemove="moveTooltip(event)">
+                        <div id="bar5" class="w-full bg-emerald-500 group-hover:bg-emerald-400 bar-transition rounded-t" style="height: 96%;"></div>
                         <span class="text-[10px] font-medium text-gray-400 mt-2">10</span>
                     </div>
 
                 </div>
             </div>
 
-            <!-- TREND GRAPH WITH LABELS -->
+            <!-- TREND GRAPH WITH HOVER TOOLTIPS -->
             <div class="bg-white dark:bg-bcd-cardDark p-5 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b border-gray-200 dark:border-bcd-borderDark pb-3">
                     <div>
                         <h2 class="text-sm font-bold text-gray-900 dark:text-white">Evolución de CSAT y Promotores</h2>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Tendencia acumulada mensual</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pasa el ratón por los puntos para ver el histórico</p>
                     </div>
                     <button class="text-xs text-gray-400 hover:text-white border border-gray-300 dark:border-slate-700 rounded px-2 py-1">
                         <i class="fa-solid fa-download mr-1"></i> Exportar
@@ -273,7 +287,7 @@
                     </div>
                 </div>
 
-                <!-- SIMULATED TREND SVG GRAPH WITH LABELS -->
+                <!-- SIMULATED TREND SVG GRAPH WITH HOVER -->
                 <div class="h-64 relative flex items-center justify-center">
                     <svg class="w-full h-full overflow-visible" viewBox="0 0 500 200">
                         <!-- Grid lines -->
@@ -282,36 +296,36 @@
                         <line x1="0" y1="160" x2="500" y2="160" stroke="#334155" stroke-dasharray="4" stroke-opacity="0.3"/>
 
                         <!-- Promotores Line (Green) -->
-                        <path id="trendPathGreen" d="M 20 110 Q 120 80, 220 60 T 480 30" fill="none" stroke="#10b981" stroke-width="3"/>
+                        <path id="pathGreen" d="M 20 110 Q 120 80, 220 60 T 480 30" fill="none" stroke="#10b981" stroke-width="3"/>
                         
                         <!-- CSAT Line (Blue) -->
-                        <path id="trendPathBlue" d="M 20 70 Q 120 50, 220 40 T 480 20" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                        <path id="pathBlue" d="M 20 70 Q 120 50, 220 40 T 480 20" fill="none" stroke="#3b82f6" stroke-width="3"/>
 
-                        <!-- Points & Value Labels (CSAT Blue) -->
-                        <circle cx="20" cy="70" r="4" fill="#3b82f6"/>
-                        <text x="20" y="60" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">91%</text>
+                        <!-- Interactive Points CSAT (Blue) -->
+                        <circle cx="20" cy="70" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 1 - CSAT', '91.0% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
+                        
+                        <circle cx="170" cy="48" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 3 - CSAT', '93.2% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <circle cx="170" cy="48" r="4" fill="#3b82f6"/>
-                        <text x="170" y="38" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">93%</text>
+                        <circle cx="330" cy="32" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 5 - CSAT', '94.2% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <circle cx="330" cy="32" r="4" fill="#3b82f6"/>
-                        <text x="330" y="22" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">94.2%</text>
+                        <circle cx="480" cy="20" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes actual - CSAT', '94.8% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <circle cx="480" cy="20" r="4" fill="#3b82f6"/>
-                        <text x="480" y="10" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">94.8%</text>
+                        <!-- Interactive Points Promotores (Green) -->
+                        <circle cx="20" cy="110" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 1 - Promotores', '78.0% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <!-- Points & Value Labels (Promotores Green) -->
-                        <circle cx="20" cy="110" r="4" fill="#10b981"/>
-                        <text x="20" y="125" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">78%</text>
+                        <circle cx="170" cy="72" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 3 - Promotores', '81.0% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <circle cx="170" cy="72" r="4" fill="#10b981"/>
-                        <text x="170" y="87" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">81%</text>
+                        <circle cx="330" cy="45" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes 5 - Promotores', '82.5% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
 
-                        <circle cx="330" cy="45" r="4" fill="#10b981"/>
-                        <text x="330" y="60" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">82.5%</text>
-
-                        <circle cx="480" cy="30" r="4" fill="#10b981"/>
-                        <text x="480" y="45" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">83.1%</text>
+                        <circle cx="480" cy="30" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
+                                onmouseenter="showTooltip(event, 'Mes actual - Promotores', '83.1% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
                     </svg>
                 </div>
             </div>
@@ -337,50 +351,92 @@
             }
         }
 
+        /* TOOLTIP CONTROLS */
+        const tooltip = document.getElementById('tooltip');
+
+        function showTooltip(e, title, val) {
+            tooltip.innerHTML = `<div class="font-bold text-bcd-accent">${title}</div><div>${val}</div>`;
+            tooltip.classList.remove('hidden');
+            moveTooltip(e);
+        }
+
+        function moveTooltip(e) {
+            tooltip.style.left = (e.clientX + 12) + 'px';
+            tooltip.style.top = (e.clientY + 12) + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.classList.add('hidden');
+        }
+
+        /* DYNAMIC FILTERS LOGIC */
         function updateDashboard() {
             const period = document.getElementById('filterPeriod').value;
-            const team = document.getElementById('filterTeam').value;
             const channel = document.getElementById('filterChannel').value;
+            const team = document.getElementById('filterTeam').value;
+            const type = document.getElementById('filterType').value;
 
-            let env = 184, resp = 142, csat = "94.8%", det = 2, tasa = "77.2%";
-            let b1 = 2, b2 = 8, b3 = 14, b4 = 42, b5 = 76;
+            // Base Values
+            let env = 184, resp = 142, csat = 94.8, det = 2;
+            let h1 = 6, h2 = 22, h3 = 38, h4 = 72, h5 = 96;
 
-            if (period === '3m') {
-                env = 92; resp = 74; csat = "96.2%"; det = 1; tasa = "80.4%";
-                b1 = 1; b2 = 3; b3 = 6; b4 = 24; b5 = 40;
-            } else if (period === '1m') {
-                env = 31; resp = 26; csat = "98.0%"; det = 0; tasa = "83.8%";
-                b1 = 0; b2 = 1; b3 = 2; b4 = 7; b5 = 16;
+            // Filter Channel Modifications
+            if (channel === 'whatsapp') {
+                csat += 2.3;
+                resp = Math.round(resp * 0.35);
+                env = Math.round(env * 0.35);
+                h4 = 80; h5 = 98; h1 = 2;
+            } else if (channel === 'email') {
+                csat -= 1.2;
+                resp = Math.round(resp * 0.45);
+                env = Math.round(env * 0.45);
+                h3 = 45; h4 = 65;
+            } else if (channel === 'phone') {
+                csat += 0.8;
+                resp = Math.round(resp * 0.20);
+                env = Math.round(env * 0.20);
             }
 
+            // Filter Team Modifications
             if (team === 'multi1') {
-                env = Math.round(env * 0.4);
-                resp = Math.round(resp * 0.4);
-                csat = "96.5%";
+                csat = 96.5;
+                det = 0;
+                env = Math.round(env * 0.5);
+                resp = Math.round(resp * 0.5);
+                h1 = 0; h5 = 99;
+            } else if (team === 'equipoA') {
+                csat = 93.9;
+            }
+
+            // Filter Period Modifications
+            if (period === '3m') {
+                env = Math.round(env * 0.5);
+                resp = Math.round(resp * 0.5);
+                csat = Math.min(99.0, csat + 1.2);
+            } else if (period === '1m') {
+                env = Math.round(env * 0.2);
+                resp = Math.round(resp * 0.2);
+                csat = Math.min(99.5, csat + 2.5);
                 det = 0;
             }
 
-            if (channel === 'whatsapp') {
-                csat = "97.1%";
-                tasa = "85.2%";
-            } else if (channel === 'email') {
-                tasa = "71.4%";
-            }
+            // Calculate Response Rate
+            const tasa = ((resp / env) * 100).toFixed(1);
 
-            // Aplicar KPI
+            // Apply updates to UI
             document.getElementById('kpiEnviadas').innerText = env;
             document.getElementById('kpiRespondidas').innerText = resp;
-            document.getElementById('kpiCsat').innerText = csat;
+            document.getElementById('kpiCsat').innerText = csat.toFixed(1) + '%';
             document.getElementById('kpiDetractores').innerText = det;
-            document.getElementById('kpiTasa').innerText = tasa;
+            document.getElementById('kpiTasa').innerText = tasa + '%';
             document.getElementById('kpiTasaSub').innerText = `${resp} respuestas de ${env} envíos`;
 
-            // Aplicar barras y etiquetas
-            document.getElementById('labelBar1').innerText = b1;
-            document.getElementById('labelBar2').innerText = b2;
-            document.getElementById('labelBar3').innerText = b3;
-            document.getElementById('labelBar4').innerText = b4;
-            document.getElementById('labelBar5').innerText = b5;
+            // Animate Bars
+            document.getElementById('bar1').style.height = h1 + '%';
+            document.getElementById('bar2').style.height = h2 + '%';
+            document.getElementById('bar3').style.height = h3 + '%';
+            document.getElementById('bar4').style.height = h4 + '%';
+            document.getElementById('bar5').style.height = h5 + '%';
         }
 
         function resetDashboard() {
