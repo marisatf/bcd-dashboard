@@ -1,451 +1,791 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BCD Travel - Perceived Quality Dashboard</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        bcd: {
-                            blue: '#002244',
-                            lightBlue: '#0066B2',
-                            accent: '#38B2F6',
-                            bgDark: '#0f172a',
-                            cardDark: '#1e293b',
-                            borderDark: '#334155'
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocalScope Omnichannel Platform - Active Seguros Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            focal: {
+              blue: '#0e71ce',
+              darkBlue: '#005bb5',
+              lightBg: '#f3f4f5',
+              border: '#d1d5db',
+              selectedBg: '#e0f2fe',
+              aiGreen: '#3b82f6',
+              tagGreen: '#a3e635',
+              prioritario: '#f59e0b',
+              otros: '#84cc16'
             }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
         }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .bar-transition { transition: height 0.4s ease, background-color 0.3s ease; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+    .whatsapp-bg {
+      background-color: #efeae2;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 dark:bg-bcd-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-200">
+<body class="bg-gray-100 flex flex-col h-screen select-none">
 
-    <!-- FLOATING TOOLTIP -->
-    <div id="tooltip" class="fixed hidden bg-slate-900 text-white text-xs px-3 py-1.5 rounded-md shadow-xl border border-slate-700 pointer-events-none z-50 transition-opacity duration-150"></div>
-
-    <!-- TOP HEADER -->
-    <header class="bg-bcd-blue text-white px-6 py-3 flex justify-between items-center shadow-lg border-b border-gray-700">
-        <div class="flex items-center space-x-3">
-            <span class="bg-blue-600 text-white font-black text-xs px-2 py-1 rounded">BCD</span>
-            <span class="font-bold tracking-wide text-sm md:text-base">BCD Travel</span>
+  <!-- TOP HEADER FOCALSCOPE -->
+  <header class="bg-[#0e71ce] text-white flex items-center justify-between px-3 py-1.5 shadow-md flex-shrink-0 z-20">
+    <div class="flex items-center space-x-3">
+      <!-- ICONOS CANALES FIEL A LA IMAGEN -->
+      <div class="flex items-center space-x-2">
+        <!-- Correo (Naranja) -->
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-regular fa-envelope text-lg"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
-        
-        <!-- SEARCH & USER -->
-        <div class="flex items-center space-x-4">
-            <div class="relative hidden sm:block">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-gray-400"></i>
-                <input type="text" placeholder="Buscar métrica o filtro..." class="bg-slate-800/80 text-xs pl-8 pr-4 py-1.5 rounded-md border border-slate-700 focus:outline-none focus:border-bcd-accent w-48 lg:w-64">
+        <!-- Chat (Naranja) -->
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-regular fa-comments text-lg"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
+        </div>
+        <!-- WhatsApp (Verde) -->
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
+        </div>
+        <!-- Integración / Loop (Verde) -->
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-solid fa-[#0e71ce] fa-arrows-rotate text-base"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
+        </div>
+        <!-- Notificaciones / Campana (Verde) -->
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-regular fa-bell text-lg"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
+        </div>
+        <!-- Teléfono CTI (Verde) -->
+        <div onclick="toggleCTIModal()" class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+          <i class="fa-solid fa-phone text-base"></i>
+          <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSCADORES SUPERIORES -->
+    <div class="flex items-center space-x-2">
+      <div class="relative">
+        <button class="bg-white/20 hover:bg-white/30 text-white text-xs px-2.5 py-1 rounded flex items-center space-x-1">
+          <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
+          <span>EMAIL SEARCH</span>
+        </button>
+      </div>
+      <input type="text" placeholder="Quick find email" class="px-2 py-1 text-xs rounded text-gray-800 w-48 focus:outline-none focus:ring-1 focus:ring-blue-300">
+      <div class="flex items-center space-x-1 pl-2 border-l border-blue-400/50">
+        <div class="w-6 h-6 rounded-full bg-blue-800 flex items-center justify-center text-xs font-bold text-white">A</div>
+        <span class="text-xs font-semibold">ADMIN1</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECONDARY ACTION BAR -->
+  <div class="bg-gray-200 border-b border-gray-300 px-3 py-1 flex items-center justify-between text-xs text-gray-700 flex-shrink-0">
+    <div class="flex items-center space-x-2">
+      <button class="bg-white hover:bg-gray-50 border border-gray-300 rounded px-2.5 py-1 font-medium flex items-center space-x-1 text-gray-700 shadow-sm">
+        <i class="fa-regular fa-envelope text-gray-500"></i>
+        <span>NEW EMAIL</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+      </button>
+      <button class="bg-white hover:bg-gray-50 border border-gray-300 rounded px-2.5 py-1 font-medium flex items-center space-x-1 text-gray-700 shadow-sm">
+        <i class="fa-regular fa-circle-check text-gray-500"></i>
+        <span>CLOSE TICKET</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+      </button>
+      <button class="bg-white hover:bg-gray-50 border border-gray-300 rounded px-2.5 py-1 font-medium flex items-center space-x-1 text-gray-700 shadow-sm">
+        <i class="fa-regular fa-user text-gray-500"></i>
+        <span>ASSIGN TO ME</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+      </button>
+      <button class="bg-white hover:bg-gray-50 border border-gray-300 rounded px-2.5 py-1 font-medium flex items-center space-x-1 text-gray-700 shadow-sm">
+        <i class="fa-solid fa-reply text-gray-500"></i>
+        <span>REPLY</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+      </button>
+      <button class="bg-white hover:bg-gray-50 border border-gray-300 rounded px-2.5 py-1 font-medium flex items-center space-x-1 text-gray-700 shadow-sm">
+        <i class="fa-solid fa-box-archive text-gray-500"></i>
+        <span>STASH</span>
+      </button>
+      <i class="fa-solid fa-ellipsis-vertical text-gray-400 px-1"></i>
+    </div>
+    
+    <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-1 bg-white border border-gray-300 rounded px-1.5 py-0.5">
+        <button class="px-1.5 py-0.5 font-bold text-blue-600 border-b-2 border-blue-600">OPEN</button>
+        <button class="px-1.5 py-0.5 text-gray-600 hover:text-black">ON HOLD</button>
+        <button class="px-1.5 py-0.5 text-gray-600 hover:text-black">CLOSED</button>
+        <button class="px-1.5 py-0.5 text-gray-600 hover:text-black">ALL</button>
+      </div>
+      <button onclick="toggleCTIModal()" class="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 rounded text-xs font-semibold flex items-center space-x-1 shadow-sm">
+        <i class="fa-solid fa-headset"></i>
+        <span>CTI Softphone / Grabaciones IA</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- ARBOL DE CARPETAS / ZONAS TERRITORIALES -->
+    <div class="w-60 bg-white border-r border-gray-300 flex flex-col flex-shrink-0 custom-scrollbar overflow-y-auto text-xs">
+      <div class="p-2 font-bold text-gray-600 flex items-center justify-between border-b border-gray-100">
+        <span><i class="fa-solid fa-house text-gray-400 mr-1.5"></i>Home</span>
+        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+      </div>
+
+      <div class="py-2">
+        <div class="px-3 py-1 font-semibold text-gray-500 text-[11px] uppercase tracking-wider flex items-center justify-between">
+          <span>Shared Items</span>
+          <i class="fa-solid fa-chevron-down text-[9px]"></i>
+        </div>
+
+        <div class="pl-2 pr-2 py-1">
+          <div class="flex items-center space-x-1 font-medium text-gray-700 py-1 px-1 rounded hover:bg-gray-100 cursor-pointer">
+            <i class="fa-solid fa-folder-minus text-amber-500"></i>
+            <span>Ticketboxes</span>
+          </div>
+
+          <!-- LISTA DE ZONAS Y DEPARTAMENTOS -->
+          <div class="pl-4 space-y-0.5">
+            <div onclick="filterFolder('all')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>000 Notas compartidas</span>
+              </div>
             </div>
 
-            <button id="themeToggle" onclick="toggleTheme()" class="bg-blue-900/60 hover:bg-blue-800 text-xs px-3 py-1.5 rounded border border-blue-500/30 flex items-center space-x-2 transition">
-                <i id="themeIcon" class="fa-solid fa-sun text-yellow-400"></i>
-                <span id="themeText" class="hidden md:inline">Modo Claro</span>
+            <div onclick="filterFolder('Centro')" class="flex items-center justify-between px-2 py-1 rounded bg-blue-50 text-blue-700 font-medium cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-solid fa-folder text-blue-500"></i>
+                <span class="font-semibold">010 - Zona Centro</span>
+              </div>
+              <span class="text-[10px] bg-blue-200 text-blue-800 px-1 rounded font-bold">2</span>
+            </div>
+
+            <div onclick="filterFolder('Levante')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>020 - Zona Levante</span>
+              </div>
+              <span class="text-[10px] text-gray-500">2</span>
+            </div>
+
+            <div onclick="filterFolder('Andalucia')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>030 - Zona Andalucía</span>
+              </div>
+              <span class="text-[10px] text-gray-500">1</span>
+            </div>
+
+            <div onclick="filterFolder('Norte')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>040 - Norte y Cataluña</span>
+              </div>
+              <span class="text-[10px] text-gray-500">1</span>
+            </div>
+
+            <div onclick="filterFolder('Mediadores')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>050 - Mediadores VIP</span>
+              </div>
+            </div>
+
+            <div onclick="filterFolder('Atencion')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>060 - At. Cliente & Coberturas</span>
+              </div>
+            </div>
+
+            <div onclick="filterFolder('Herencias')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+              <div class="flex items-center space-x-1.5">
+                <i class="fa-regular fa-folder text-gray-400"></i>
+                <span>070 - Gestoría / Herencias</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE CENTRAL: LISTA DE TICKETS -->
+    <div class="w-[520px] bg-white border-r border-gray-300 flex flex-col flex-shrink-0">
+      <!-- Search inside list -->
+      <div class="p-2 border-b border-gray-200 bg-gray-50 flex items-center space-x-2">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-gray-400 text-xs"></i>
+          <input type="text" placeholder="Search in folder, press Down key for options" class="w-full pl-8 pr-3 py-1 bg-white border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-500">
+        </div>
+        <button class="text-gray-500 hover:text-gray-700 p-1"><i class="fa-solid fa-sliders text-xs"></i></button>
+      </div>
+
+      <!-- Headers de Tabla -->
+      <div class="grid grid-cols-12 bg-gray-100 border-b border-gray-200 py-1 px-2 text-[11px] font-semibold text-gray-500 uppercase">
+        <div class="col-span-1"></div>
+        <div class="col-span-3">From</div>
+        <div class="col-span-6">Subject</div>
+        <div class="col-span-2 text-right">Date</div>
+      </div>
+
+      <!-- Lista de Clientes Active Seguros -->
+      <div id="ticketList" class="flex-1 overflow-y-auto custom-scrollbar divide-y divide-gray-100 text-xs">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+
+    <!-- PANE DERECHO: VISTA 360 CLIENTE Y TIMELINE -->
+    <div class="flex-1 bg-white flex flex-col overflow-hidden">
+      <!-- Header Ficha Cliente -->
+      <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-start justify-between">
+        <div class="flex items-start space-x-3">
+          <img id="clientAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-full object-cover border-2 border-blue-500 shadow-sm">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 id="clientName" class="text-base font-bold text-gray-800">Elena Morales</h2>
+              <span id="clientTag" class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-300">PÓLIZA ACTIVE FAMILIAR</span>
+            </div>
+            <p id="clientSub" class="text-xs text-gray-500 mt-0.5">Tomador: Elena Morales | DNI: 47823910R | Zona Centro (Madrid)</p>
+            <p id="clientMediator" class="text-[11px] text-gray-600 mt-0.5"><i class="fa-solid fa-briefcase text-gray-400 mr-1"></i>Mediador: Correduría Naranjo & Asociados (#8871)</p>
+          </div>
+        </div>
+
+        <!-- CRM POLIZAS WIDGET -->
+        <div class="bg-white border border-gray-200 rounded p-2 text-right shadow-sm max-w-xs">
+          <span class="text-[10px] uppercase font-bold text-gray-400 block mb-1">Pólizas Activas en CRM (Active)</span>
+          <div id="clientPolicies" class="space-y-1 text-[11px]">
+            <div class="flex justify-between items-center space-x-2 bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
+              <span class="font-semibold">Decesos & Asistencia:</span>
+              <span class="font-mono text-[10px]">#ACT-99482</span>
+            </div>
+            <div class="flex justify-between items-center space-x-2 bg-blue-50 text-blue-800 px-1.5 py-0.5 rounded border border-blue-200">
+              <span class="font-semibold">Cuadro Dental Gratuito:</span>
+              <span class="font-bold">Incluido</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS DE CANALES MULTICANAL -->
+      <div class="bg-gray-100 border-b border-gray-200 flex items-center px-3 space-x-1 text-xs">
+        <button onclick="switchTab('email')" id="tab-email" class="px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5">
+          <i class="fa-regular fa-envelope"></i>
+          <span>CORREO ELECTRÓNICO</span>
+        </button>
+        <button onclick="switchTab('whatsapp')" id="tab-whatsapp" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
+          <i class="fa-brands fa-whatsapp text-green-600"></i>
+          <span>WHATSAPP VIVO</span>
+        </button>
+        <button onclick="switchTab('call')" id="tab-call" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
+          <i class="fa-solid fa-phone text-blue-500"></i>
+          <span>LLAMADAS & TRANSCRIPCIÓN IA</span>
+        </button>
+      </div>
+
+      <!-- CONTENIDO DE LOS TABS -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar p-4 bg-gray-50">
+
+        <!-- TAB EMAIL -->
+        <div id="view-email" class="space-y-4">
+          <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <span id="emailBadge" class="bg-lime-400 text-gray-900 font-bold text-[10px] px-2 py-0.5 rounded">Reserva: Consulta [AI]</span>
+                <h3 id="emailSubject" class="font-bold text-gray-800 text-sm">RE: Solicitud Limpieza Dental Gratuita y Cuadro Médico</h3>
+              </div>
+              <span id="emailDate" class="text-xs text-gray-400">23 Jul 2026 - 09:15</span>
+            </div>
+            <div id="emailBody" class="text-xs text-gray-700 leading-relaxed space-y-2">
+              <p>Estimados señores de Active Seguros,</p>
+              <p>Les escribo en relación a mi póliza de asistencia familiar. Quisiera pedir cita para realizarme la limpieza dental gratuita anual que incluye mi cobertura y consultar si el centro odontológico de la C/ Velázquez entra dentro del cuadro dental gratuito.</p>
+              <p>Quedo a la espera de su respuesta para confirmar horario.</p>
+              <p>Un cordial saludo,<br><strong id="emailSender">Elena Morales</strong></p>
+            </div>
+          </div>
+
+          <!-- RESPONDEDOR CON IA -->
+          <div class="bg-white border border-blue-200 rounded-lg p-3 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-blue-700 flex items-center">
+                <i class="fa-solid fa-robot mr-1.5"></i>
+                FocalScope Agent Assist (Respuesta Sugerida por IA)
+              </span>
+              <button onclick="insertAiResponse()" class="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-2.5 py-1 rounded shadow-sm">
+                Insertar Borrador IA
+              </button>
+            </div>
+            <textarea id="replyBox" rows="4" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" placeholder="Escriba su respuesta o use Agent Assist..."></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <div class="flex space-x-1">
+                <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-paperclip text-xs"></i></button>
+                <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-face-smile text-xs"></i></button>
+              </div>
+              <button class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded font-medium hover:bg-blue-700">Enviar Respuesta</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB WHATSAPP FIEL A FOCALSCOPE -->
+        <div id="view-whatsapp" class="hidden h-full flex flex-col rounded-lg border border-gray-300 overflow-hidden shadow-sm">
+          <div class="bg-gray-100 border-b border-gray-300 px-3 py-2 flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-2">
+              <i class="fa-brands fa-whatsapp text-green-600 text-base"></i>
+              <span id="waPhone" class="font-bold text-gray-700">+34 612 884 920</span>
+              <span class="text-gray-400">|</span>
+              <span id="waClient" class="text-gray-600">Elena Morales</span>
+            </div>
+            <div class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Consentimiento HSM verificado
+            </div>
+          </div>
+
+          <!-- CHAT BODY -->
+          <div class="flex-1 p-4 whatsapp-bg overflow-y-auto space-y-3 text-xs">
+            <!-- System Notice Box (Exacto a la imagen) -->
+            <div class="bg-[#dcf8c6]/60 border border-green-300 rounded p-2 text-center text-[11px] text-gray-700 max-w-md mx-auto">
+              <i class="fa-solid fa-circle-info text-green-600 mr-1"></i>
+              System: Plantilla de bienvenida HSM enviada correctamente. El cliente ha iniciado conversación voluntaria.
+            </div>
+
+            <!-- Cliente Bubble -->
+            <div class="flex flex-col items-start">
+              <div class="bg-white rounded-lg p-2.5 shadow-sm max-w-sm border border-gray-200">
+                <span id="waSenderName" class="font-bold text-blue-600 text-[10px] block mb-0.5">Elena Morales</span>
+                <p id="waText1">Hola, buenos días. ¿El servicio de manitas para colgar una lámpara en casa entra en mi seguro con Active?</p>
+                <span class="text-[9px] text-gray-400 block text-right mt-1">10:12 AM <i class="fa-solid fa-check text-blue-500"></i></span>
+              </div>
+            </div>
+
+            <!-- Agente Human Bubble -->
+            <div class="flex flex-col items-end">
+              <div class="bg-[#dcf8c6] rounded-lg p-2.5 shadow-sm max-w-sm border border-green-200">
+                <span class="font-bold text-green-800 text-[10px] block mb-0.5">Agente (FocalScope)</span>
+                <p id="waText2">¡Hola, Elena! Sí, exactamente. Tu póliza Active Asistencia Familiar incluye 3 horas anuales de servicio Manitas del Hogar gratis. ¿Quieres que te envíe un operario esta semana?</p>
+                <span class="text-[9px] text-gray-400 block text-right mt-1">10:14 AM <i class="fa-solid fa-check-double text-blue-500"></i></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- INPUT CHAT -->
+          <div class="bg-white border-t border-gray-300 p-2 flex items-center space-x-2">
+            <input type="text" placeholder="Escribir mensaje por WhatsApp..." class="flex-1 text-xs border border-gray-300 rounded-full px-3 py-1.5 focus:outline-none focus:border-green-500">
+            <button class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-700">
+              <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
-
-            <div class="flex items-center space-x-2 border-l border-slate-700 pl-4">
-                <div class="w-7 h-7 rounded-full bg-bcd-accent text-bcd-blue font-bold flex items-center justify-center text-xs">A</div>
-                <span class="text-xs font-semibold tracking-wider">ANA</span>
-            </div>
+          </div>
         </div>
-    </header>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main class="p-4 md:p-6 space-y-6 max-w-[1600px] mx-auto">
+        <!-- TAB CALL & IA (EXACTO A LA IMAGEN) -->
+        <div id="view-call" class="hidden space-y-4">
+          <!-- CTI PLAYER & IA TRANSCRIPTION -->
+          <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <div class="flex items-center space-x-2">
+                <span class="bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded">LLAMADA REGISTRADA</span>
+                <span class="font-bold text-gray-800 text-xs">Transcripción de IA #1000000000486</span>
+              </div>
+              <span class="text-xs text-gray-500">Español (España) | Duración: 01:11</span>
+            </div>
+
+            <!-- Reproductor de Audio -->
+            <div class="bg-gray-100 rounded-lg p-3 flex items-center space-x-3 border border-gray-200">
+              <button onclick="playSimulatedAudio()" class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
+                <i id="playIcon" class="fa-solid fa-play text-xs"></i>
+              </button>
+              <div class="flex-1">
+                <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
+                  <div id="audioProgress" class="bg-blue-600 h-full w-1/3"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-gray-500 mt-1 font-mono">
+                  <span>00:22</span>
+                  <span>01:11</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-volume-high text-gray-500 text-xs"></i>
+            </div>
+
+            <!-- Transcripción Temporalizada -->
+            <div class="space-y-2 text-xs bg-gray-50 p-3 rounded border border-gray-200 max-h-40 overflow-y-auto custom-scrollbar">
+              <div class="flex space-x-2">
+                <span class="font-mono text-blue-600 text-[10px]">00:00</span>
+                <p><strong>Agente Active:</strong> Gracias por llamar a Active Seguros, le atiende Carlos. ¿En qué puedo ayudarle hoy?</p>
+              </div>
+              <div class="flex space-x-2">
+                <span class="font-mono text-blue-600 text-[10px]">00:10</span>
+                <p><strong id="callClientName">Elena Morales:</strong> Hola, llamaba para consultar sobre la elaboración del testamento online. ¿Tengo que pagar algún extra con mi seguro?</p>
+              </div>
+              <div class="flex space-x-2">
+                <span class="font-mono text-blue-600 text-[10px]">00:18</span>
+                <p><strong>Agente Active:</strong> No, Elena. Su modalidad Active Asistencia incluye el asesoramiento jurídico completo y la tramitación del testamento ante notario sin coste adicional.</p>
+              </div>
+            </div>
+
+            <!-- Resumen e Intención IA (Semiautómata) -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <div class="bg-blue-50 border border-blue-200 rounded p-2.5 text-xs">
+                <span class="font-bold text-blue-900 block mb-1"><i class="fa-solid fa-tag text-blue-600 mr-1"></i> Categorías de IA</span>
+                <div class="flex justify-between items-center text-[11px] mb-1">
+                  <span class="text-gray-600">Intención:</span>
+                  <span class="font-bold text-blue-700">CONSULTA COBERTURA / TESTAMENTO</span>
+                </div>
+                <div class="flex justify-between items-center text-[11px]">
+                  <span class="text-gray-600">Puntuación Calidad:</span>
+                  <span class="font-bold text-green-600">10 / 10</span>
+                </div>
+              </div>
+
+              <div class="bg-gray-50 border border-gray-200 rounded p-2.5 text-xs">
+                <span class="font-bold text-gray-800 block mb-1"><i class="fa-solid fa-list-check text-gray-600 mr-1"></i> Puntos Clave de IA</span>
+                <ul class="list-disc list-inside text-[11px] text-gray-600 space-y-0.5">
+                  <li>Consulta sobre testamento ante notario.</li>
+                  <li>Confirmada gratuidad por póliza activa.</li>
+                  <li>Se envía enlace de acceso a la app.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CTI SOFTPHONE MODAL FLOTANTE (REPLICA EXACTA DE LA IMAGEN) -->
+  <div id="ctiModal" class="hidden fixed bottom-4 right-4 w-96 bg-white rounded-lg shadow-2xl border border-gray-300 z-50 overflow-hidden">
+    <!-- Header Softphone -->
+    <div class="bg-[#0e71ce] text-white p-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="bg-green-500 w-2.5 h-2.5 rounded-full animate-pulse"></span>
+        <span class="font-bold text-xs">Softphone CTI - Extension 4082</span>
+      </div>
+      <button onclick="toggleCTIModal()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Agent info bar -->
+    <div class="bg-blue-50 px-3 py-2 border-b border-blue-100 flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2">
+        <div class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">K</div>
+        <span class="font-semibold text-gray-700">KASPER (Agente Senior)</span>
+      </div>
+      <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded">Listo para llamadas</span>
+    </div>
+
+    <!-- Call Log List (Fiel a la foto) -->
+    <div class="p-2 bg-gray-50 max-h-60 overflow-y-auto space-y-1.5 text-xs">
+      <div class="bg-white p-2 rounded border border-gray-200 shadow-sm flex items-center justify-between">
+        <div>
+          <span class="bg-red-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">CAMBIO DE REGISTRO</span>
+          <p class="font-bold text-gray-800 mt-1">441135195310</p>
+          <p class="text-[10px] text-gray-400">Active - Zona Centro</p>
+        </div>
+        <div class="text-right text-[10px] text-gray-500">
+          <span>01:11</span>
+          <span class="block text-green-600 font-bold">#1-488</span>
+        </div>
+      </div>
+
+      <div class="bg-white p-2 rounded border border-gray-200 shadow-sm flex items-center justify-between">
+        <div>
+          <span class="bg-red-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">FACTURACIÓN</span>
+          <p class="font-bold text-gray-800 mt-1">441135195310</p>
+          <p class="text-[10px] text-gray-400">Active - Mediadores</p>
+        </div>
+        <div class="text-right text-[10px] text-gray-500">
+          <span>01:03</span>
+          <span class="block text-green-600 font-bold">#1-487</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT CON DATOS Y LOGICA COMPLETA -->
+  <script>
+    // BASE DE DATOS DE CLIENTES ACTIVE SEGUROS
+    const clientsData = [
+      {
+        id: 1,
+        folder: 'Centro',
+        name: 'Elena Morales',
+        dni: '47823910R',
+        sub: 'Tomador: Elena Morales | DNI: 47823910R | Zona Centro (Madrid)',
+        mediator: 'Correduría Naranjo & Asociados (#8871)',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE FAMILIAR',
+        policy1: 'Decesos & Asistencia: #ACT-99482',
+        policy2: 'Cuadro Dental Gratuito: Incluido',
+        tagColor: 'Reserva: Consulta [AI]',
+        subject: 'RE: Solicitud Limpieza Dental Gratuita y Cuadro Médico',
+        date: '10:49',
+        phone: '+34 612 884 920',
+        emailBody: 'Estimados señores de Active Seguros,<br><br>Les escribo en relación a mi póliza de asistencia familiar. Quisiera pedir cita para realizarme la limpieza dental gratuita anual que incluye mi cobertura y consultar si el centro odontológico de la C/ Velázquez entra dentro del cuadro dental gratuito.<br><br>Quedo a la espera de su respuesta.<br>Un saludo,<br><strong>Elena Morales</strong>',
+        waMessage: 'Hola, buenos días. ¿El servicio de manitas para colgar una lámpara en casa entra en mi seguro con Active?',
+        waReply: '¡Hola, Elena! Sí, exactamente. Tu póliza Active Asistencia Familiar incluye 3 horas anuales de servicio Manitas del Hogar gratis.'
+      },
+      {
+        id: 2,
+        folder: 'Centro',
+        name: 'Carlos Mendoza',
+        dni: '53210984P',
+        sub: 'Tomador: Carlos Mendoza | DNI: 53210984P | Zona Centro (Toledo)',
+        mediator: 'Gestoría & Seguros Iberia (#1022)',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE SENIOR',
+        policy1: 'Decesos & Asistencia: #ACT-10293',
+        policy2: 'Telemedicina 24h: Activa',
+        tagColor: 'Prioritario',
+        subject: 'Consulta urgente: Asesoramiento sobre Testamento Online',
+        date: '10:43',
+        phone: '+34 655 410 992',
+        emailBody: 'Buenas tardes,<br><br>Quisiera tramitar el borrador del testamento online que incluye mi seguro de asistencia. ¿Me pueden indicar qué pasos seguir o enviarme el enlace de acceso al portal de la gestoría?<br><br>Gracias,<br><strong>Carlos Mendoza</strong>',
+        waMessage: 'Hola, ¿dónde puedo ver la lista de médicos especialistas de la app TuSalud?',
+        waReply: 'Hola Carlos, puedes acceder directamente descargando la app TuSalud Active e introduciendo tu DNI 53210984P.'
+      },
+      {
+        id: 3,
+        folder: 'Levante',
+        name: 'Javier Gómez',
+        dni: '20918273K',
+        sub: 'Tomador: Javier Gómez | DNI: 20918273K | Zona Levante (Valencia)',
+        mediator: 'Seguros Mediterráneo (#4401)',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE PRIMA NIVELADA',
+        policy1: 'Decesos & Asistencia: #ACT-77120',
+        policy2: 'Asistencia en Viaje: Mundial',
+        tagColor: 'Asistencia [AI]',
+        subject: 'Solicitud certificado de cobertura para viaje al extranjero',
+        date: '10:33',
+        phone: '+34 688 331 002',
+        emailBody: 'Estimados,<br><br>Viajo la semana que viene fuera de España y necesitaría la acreditación en inglés de la cobertura médica y de asistencia en viaje que incluye mi seguro.<br><br>Atentamente,<br><strong>Javier Gómez</strong>',
+        waMessage: 'Buenos días, necesito confirmación de si el seguro cubre repatriación o asistencia médica en Italia.',
+        waReply: 'Hola Javier. Sí, tu seguro cubre asistencia médica hasta 15.000€ y repatriación completa en todo el mundo.'
+      },
+      {
+        id: 4,
+        folder: 'Andalucia',
+        name: 'Lucía Fernández',
+        dni: '31002938Y',
+        sub: 'Tomador: Lucía Fernández | DNI: 31002938Y | Zona Andalucía (Sevilla)',
+        mediator: 'Correduría Sur (#3319)',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE INDIVIDUAL',
+        policy1: 'Decesos & Asistencia: #ACT-30012',
+        policy2: 'Orientación Médica 24h: Incluida',
+        tagColor: 'Otros [AI]',
+        subject: 'Duda sobre la actualización de la modalidad de prima mixta a nivelada',
+        date: '10:21',
+        phone: '+34 622 901 223',
+        emailBody: 'Hola,<br><br>Querría informarme sobre la diferencia de cuota al pasar mi póliza de prima mixta a prima nivelada antes de mi próximo cumpleaños.<br><br>Gracias,<br><strong>Lucía Fernández</strong>',
+        waMessage: 'Hola! ¿Me podéis mandar el contacto de la clínica dental asociada en Sevilla?',
+        waReply: '¡Hola Lucía! En Sevilla tienes disponible la Clínica Dental Dentalia en la C/ Sierpes, 12.'
+      },
+      {
+        id: 5,
+        folder: 'Norte',
+        name: 'Antonio Ruiz',
+        dni: '71928301M',
+        sub: 'Tomador: Antonio Ruiz | DNI: 71928301M | Zona Norte (Bilbao)',
+        mediator: 'NorteSeguros Mediación (#5512)',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE FAMILIAR',
+        policy1: 'Decesos & Asistencia: #ACT-44910',
+        policy2: 'Servicio Manitas Hogar: 3h/año',
+        tagColor: 'Prioritario',
+        subject: 'Solicitud de fontanero para pequeña avería (Servicio Manitas)',
+        date: '10:19',
+        phone: '+34 670 112 400',
+        emailBody: 'Buenos días,<br><br>Necesito solicitar la visita de un técnico para cambiar el grifo de la cocina haciendo uso del servicio manitas incluido en la póliza.<br><br>Un saludo,<br><strong>Antonio Ruiz</strong>',
+        waMessage: 'Hola, querría agendar la cita del manitas para este jueves por la mañana.',
+        waReply: 'Perfecto Antonio. Te confirmamos cita para este jueves entre las 10:00 y las 12:00h.'
+      },
+      {
+        id: 6,
+        folder: 'Herencias',
+        name: 'Carmen Navarro',
+        dni: '18273645Z',
+        sub: 'Tomador: Carmen Navarro | DNI: 18273645Z | Gestoría & Herencias',
+        mediator: 'Active Directo (#001)',
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+        tag: 'PÓLIZA ACTIVE SENIOR',
+        policy1: 'Decesos & Asistencia: #ACT-88201',
+        policy2: 'Borrado Digital & Herencia: Incluido',
+        tagColor: 'Reserva: Consulta [AI]',
+        subject: 'Consulta sobre el borrado de huella digital y redes sociales',
+        date: '09:52',
+        phone: '+34 633 440 192',
+        emailBody: 'Estimados gestores,<br><br>Me gustaría consultar cómo funciona la cobertura del borrado de huella digital que indica mi seguro Active.<br><br>Muchas gracias,<br><strong>Carmen Navarro</strong>',
+        waMessage: 'Hola, ¿la gestoría me puede ayudar también con las gestiones de jubilación?',
+        waReply: 'Hola Carmen. Sí, nuestro departamento de asesoramiento jurídico orienta en todos esos trámites.'
+      }
+    ];
+
+    let currentClients = [...clientsData];
+    let selectedClient = clientsData[0];
+
+    // RENDERIZAR LISTA DE TICKETS
+    function renderTickets() {
+      const listContainer = document.getElementById('ticketList');
+      listContainer.innerHTML = '';
+
+      currentClients.forEach(client => {
+        const isSelected = client.id === selectedClient.id;
+        const card = document.createElement('div');
+        card.className = `p-2.5 border-b border-gray-100 hover:bg-blue-50/50 cursor-pointer transition ${isSelected ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''}`;
         
-        <!-- TITLE & FILTERS -->
-        <div class="space-y-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <div>
-                    <p class="text-xs font-semibold text-bcd-accent uppercase tracking-widest">Customer Experience • Analytics</p>
-                    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Perceived Quality Dashboard</h1>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                        Datos en tiempo real
-                    </span>
-                </div>
+        let tagBg = 'bg-lime-400 text-gray-900';
+        if (client.tagColor.includes('Prioritario')) tagBg = 'bg-amber-400 text-amber-950';
+        if (client.tagColor.includes('Asistencia')) tagBg = 'bg-blue-500 text-white';
+
+        card.onclick = () => selectClient(client.id);
+
+        card.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-[10px] flex-shrink-0">
+              ${client.name.charAt(0)}
             </div>
-
-            <!-- FILTERS BAR -->
-            <div class="bg-white dark:bg-bcd-cardDark p-3 rounded-lg border border-gray-200 dark:border-bcd-borderDark flex flex-wrap items-center justify-between gap-3 shadow-sm">
-                <div class="flex flex-wrap items-center gap-3">
-                    <span class="text-xs font-bold uppercase text-gray-400 tracking-wider">FILTRAR POR:</span>
-                    
-                    <select id="filterPeriod" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
-                        <option value="6m">Período: Últimos 6 meses</option>
-                        <option value="3m">Período: Últimos 3 meses</option>
-                        <option value="1m">Período: Último mes</option>
-                    </select>
-
-                    <select id="filterType" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
-                        <option value="all">Tipo: Todos</option>
-                        <option value="post">Post-viaje</option>
-                        <option value="phone">Atención telefónica</option>
-                        <option value="vip">Gestión VIP</option>
-                    </select>
-
-                    <select id="filterChannel" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
-                        <option value="all">Todos los canales</option>
-                        <option value="phone">Teléfono</option>
-                        <option value="email">Email</option>
-                        <option value="whatsapp">WhatsApp</option>
-                    </select>
-
-                    <select id="filterTeam" onchange="updateDashboard()" class="bg-gray-50 dark:bg-slate-800 text-xs border border-gray-300 dark:border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-bcd-accent cursor-pointer">
-                        <option value="all">Todos los Equipos</option>
-                        <option value="multi1">Multi1</option>
-                        <option value="equipoA">Equipo A</option>
-                        <option value="equipoB">Equipo B</option>
-                        <option value="equipoC">Equipo C</option>
-                    </select>
-                </div>
-
-                <button onclick="resetDashboard()" class="text-xs text-gray-500 hover:text-bcd-accent flex items-center space-x-1 transition">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <span>Restablecer</span>
-                </button>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-gray-800 truncate text-xs">${client.name}</span>
+                <span class="text-[10px] text-gray-400 font-mono">${client.date}</span>
+              </div>
+              <div class="flex items-center space-x-1.5 mt-0.5">
+                <span class="${tagBg} text-[9px] font-bold px-1.5 py-0.2 rounded flex-shrink-0">${client.tagColor}</span>
+                <p class="text-[11px] text-gray-600 truncate">${client.subject}</p>
+              </div>
             </div>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+
+    // SELECCIONAR CLIENTE DINO Y CAMBIAR TODO EL PANEL DERECHO
+    function selectClient(id) {
+      selectedClient = clientsData.find(c => c.id === id);
+      renderTickets();
+
+      // Actualizar Header Ficha 360
+      document.getElementById('clientAvatar').src = selectedClient.avatar;
+      document.getElementById('clientName').innerText = selectedClient.name;
+      document.getElementById('clientTag').innerText = selectedClient.tag;
+      document.getElementById('clientSub').innerText = selectedClient.sub;
+      document.getElementById('clientMediator').innerHTML = `<i class="fa-solid fa-briefcase text-gray-400 mr-1"></i>Mediador: ${selectedClient.mediator}`;
+      
+      // Actualizar Pólizas CRM
+      document.getElementById('clientPolicies').innerHTML = `
+        <div class="flex justify-between items-center space-x-2 bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
+          <span class="font-semibold">Decesos & Asistencia:</span>
+          <span class="font-mono text-[10px]">${selectedClient.policy1.split(': ')[1]}</span>
         </div>
-
-        <!-- KPI CARDS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            
-            <div class="bg-white dark:bg-bcd-cardDark p-4 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm relative overflow-hidden">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Encuestas enviadas</span>
-                    <i class="fa-solid fa-paper-plane text-bcd-accent text-xs"></i>
-                </div>
-                <div id="kpiEnviadas" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">184</div>
-                <div id="kpiEnviadasSub" class="text-[10px] text-emerald-500 font-semibold mt-1">
-                    <i class="fa-solid fa-arrow-up"></i> +12.4% vs período anterior
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-bcd-cardDark p-4 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Encuestas respondidas</span>
-                    <i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>
-                </div>
-                <div id="kpiRespondidas" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">142</div>
-                <div class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Respuestas recibidas</div>
-            </div>
-
-            <div class="bg-white dark:bg-bcd-cardDark p-4 rounded-xl border border-emerald-500/30 shadow-sm bg-gradient-to-br from-emerald-500/5 to-transparent">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Satisfacción media (CSAT)</span>
-                    <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                </div>
-                <div id="kpiCsat" class="text-2xl font-extrabold mt-2 text-emerald-500 dark:text-emerald-400">94.8%</div>
-                <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">
-                    <i class="fa-solid fa-circle-check"></i> Excelente (Objetivo >90%)
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-bcd-cardDark p-4 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Número de detractores</span>
-                    <i class="fa-solid fa-shield-halved text-bcd-accent text-xs"></i>
-                </div>
-                <div id="kpiDetractores" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">2</div>
-                <div class="text-[10px] text-emerald-500 font-semibold mt-1">
-                    <i class="fa-solid fa-arrow-down"></i> Mínimo histórico
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-bcd-cardDark p-4 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Tasa de respuesta</span>
-                    <i class="fa-solid fa-chart-line text-bcd-accent text-xs"></i>
-                </div>
-                <div id="kpiTasa" class="text-2xl font-bold mt-2 text-gray-900 dark:text-white">77.2%</div>
-                <div id="kpiTasaSub" class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">142 respuestas de 184 envíos</div>
-            </div>
-
+        <div class="flex justify-between items-center space-x-2 bg-blue-50 text-blue-800 px-1.5 py-0.5 rounded border border-blue-200">
+          <span class="font-semibold">${selectedClient.policy2.split(': ')[0]}:</span>
+          <span class="font-bold">${selectedClient.policy2.split(': ')[1]}</span>
         </div>
+      `;
 
-        <!-- CHARTS SECTION -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- NPS & SENTIMENT DISTRIBUTION -->
-            <div class="bg-white dark:bg-bcd-cardDark p-5 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-gray-200 dark:border-bcd-borderDark pb-3">
-                    <div>
-                        <h2 class="text-sm font-bold text-gray-900 dark:text-white">Distribución de NPS y sentimiento</h2>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pasa el ratón por las barras para ver detalles</p>
-                    </div>
-                    <button class="text-xs text-gray-400 hover:text-white border border-gray-300 dark:border-slate-700 rounded px-2 py-1">
-                        <i class="fa-solid fa-download mr-1"></i> Exportar
-                    </button>
-                </div>
+      // Actualizar Tab Email
+      document.getElementById('emailBadge').innerText = selectedClient.tagColor;
+      document.getElementById('emailSubject').innerText = selectedClient.subject;
+      document.getElementById('emailSender').innerText = selectedClient.name;
+      document.getElementById('emailBody').innerHTML = selectedClient.emailBody;
 
-                <!-- LEGEND -->
-                <div class="flex items-center space-x-6 text-xs">
-                    <div class="flex items-center space-x-1.5">
-                        <span class="w-3 h-3 bg-red-500 rounded-sm"></span>
-                        <span class="text-gray-600 dark:text-gray-300">Detractores (0-6)</span>
-                    </div>
-                    <div class="flex items-center space-x-1.5">
-                        <span class="w-3 h-3 bg-amber-400 rounded-sm"></span>
-                        <span class="text-gray-600 dark:text-gray-300">Pasivos (7-8)</span>
-                    </div>
-                    <div class="flex items-center space-x-1.5">
-                        <span class="w-3 h-3 bg-emerald-500 rounded-sm"></span>
-                        <span class="text-gray-600 dark:text-gray-300">Promotores (9-10)</span>
-                    </div>
-                </div>
+      // Actualizar Tab WhatsApp
+      document.getElementById('waPhone').innerText = selectedClient.phone;
+      document.getElementById('waClient').innerText = selectedClient.name;
+      document.getElementById('waSenderName').innerText = selectedClient.name;
+      document.getElementById('waText1').innerText = selectedClient.waMessage;
+      document.getElementById('waText2').innerText = selectedClient.waReply;
 
-                <!-- BARS GRAPH WITH DYNAMIC HOVER TOOLTIPS -->
-                <div class="h-64 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-gray-200 dark:border-slate-700 relative">
-                    
-                    <!-- BAR 1-6 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer" 
-                         onmouseenter="showTooltip(event, 'Detractores (1-6)', '2 respuestas (1.4%)')" 
-                         onmouseleave="hideTooltip()" 
-                         onmousemove="moveTooltip(event)">
-                        <div id="bar1" class="w-full bg-red-500 group-hover:bg-red-400 bar-transition rounded-t" style="height: 6%;"></div>
-                        <span class="text-[10px] font-medium text-gray-400 mt-2">1-6</span>
-                    </div>
+      // Actualizar Tab Llamada
+      document.getElementById('callClientName').innerText = `${selectedClient.name}:`;
+    }
 
-                    <!-- BAR 7 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
-                         onmouseenter="showTooltip(event, 'Pasivos (7)', '8 respuestas (5.6%)')" 
-                         onmouseleave="hideTooltip()" 
-                         onmousemove="moveTooltip(event)">
-                        <div id="bar2" class="w-full bg-amber-400 group-hover:bg-amber-300 bar-transition rounded-t" style="height: 22%;"></div>
-                        <span class="text-[10px] font-medium text-gray-400 mt-2">7</span>
-                    </div>
+    // FILTRAR POR CARPETAS
+    function filterFolder(folder) {
+      if (folder === 'all') {
+        currentClients = [...clientsData];
+      } else {
+        currentClients = clientsData.filter(c => c.folder === folder);
+      }
+      if (currentClients.length > 0) {
+        selectedClient = currentClients[0];
+      }
+      renderTickets();
+      if (currentClients.length > 0) {
+        selectClient(selectedClient.id);
+      }
+    }
 
-                    <!-- BAR 8 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
-                         onmouseenter="showTooltip(event, 'Pasivos (8)', '14 respuestas (9.8%)')" 
-                         onmouseleave="hideTooltip()" 
-                         onmousemove="moveTooltip(event)">
-                        <div id="bar3" class="w-full bg-amber-400 group-hover:bg-amber-300 bar-transition rounded-t" style="height: 38%;"></div>
-                        <span class="text-[10px] font-medium text-gray-400 mt-2">8</span>
-                    </div>
+    // CAMBIAR PESTAÑAS (EMAIL, WHATSAPP, CALL)
+    function switchTab(tab) {
+      document.getElementById('view-email').classList.add('hidden');
+      document.getElementById('view-whatsapp').classList.add('hidden');
+      document.getElementById('view-call').classList.add('hidden');
 
-                    <!-- BAR 9 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
-                         onmouseenter="showTooltip(event, 'Promotores (9)', '42 respuestas (29.5%)')" 
-                         onmouseleave="hideTooltip()" 
-                         onmousemove="moveTooltip(event)">
-                        <div id="bar4" class="w-full bg-emerald-500 group-hover:bg-emerald-400 bar-transition rounded-t" style="height: 72%;"></div>
-                        <span class="text-[10px] font-medium text-gray-400 mt-2">9</span>
-                    </div>
+      document.getElementById('tab-email').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
+      document.getElementById('tab-whatsapp').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
+      document.getElementById('tab-call').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
 
-                    <!-- BAR 10 -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer"
-                         onmouseenter="showTooltip(event, 'Promotores (10)', '76 respuestas (53.5%)')" 
-                         onmouseleave="hideTooltip()" 
-                         onmousemove="moveTooltip(event)">
-                        <div id="bar5" class="w-full bg-emerald-500 group-hover:bg-emerald-400 bar-transition rounded-t" style="height: 96%;"></div>
-                        <span class="text-[10px] font-medium text-gray-400 mt-2">10</span>
-                    </div>
+      if (tab === 'email') {
+        document.getElementById('view-email').classList.remove('hidden');
+        document.getElementById('tab-email').className = "px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5";
+      } else if (tab === 'whatsapp') {
+        document.getElementById('view-whatsapp').classList.remove('hidden');
+        document.getElementById('tab-whatsapp').className = "px-4 py-2 font-bold text-green-600 border-b-2 border-green-600 flex items-center space-x-1.5";
+      } else if (tab === 'call') {
+        document.getElementById('view-call').classList.remove('hidden');
+        document.getElementById('tab-call').className = "px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5";
+      }
+    }
 
-                </div>
-            </div>
+    // BORRADOR IA AGENT ASSIST
+    function insertAiResponse() {
+      const textarea = document.getElementById('replyBox');
+      textarea.value = `Estimado/a ${selectedClient.name},\n\nLe confirmamos que su póliza de Active Seguros contempla plenamente su solicitud. Hemos procedido a gestionar los trámites requeridos con la red de mediación.\n\nAtentamente,\nAtención al Cliente - Active Seguros`;
+    }
 
-            <!-- TREND GRAPH WITH HOVER TOOLTIPS -->
-            <div class="bg-white dark:bg-bcd-cardDark p-5 rounded-xl border border-gray-200 dark:border-bcd-borderDark shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-gray-200 dark:border-bcd-borderDark pb-3">
-                    <div>
-                        <h2 class="text-sm font-bold text-gray-900 dark:text-white">Evolución de CSAT y Promotores</h2>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pasa el ratón por los puntos para ver el histórico</p>
-                    </div>
-                    <button class="text-xs text-gray-400 hover:text-white border border-gray-300 dark:border-slate-700 rounded px-2 py-1">
-                        <i class="fa-solid fa-download mr-1"></i> Exportar
-                    </button>
-                </div>
+    // TOGGLE SOFTPHONE CTI
+    function toggleCTIModal() {
+      const modal = document.getElementById('ctiModal');
+      modal.classList.toggle('hidden');
+    }
 
-                <!-- LEGEND -->
-                <div class="flex items-center space-x-6 text-xs">
-                    <div class="flex items-center space-x-1.5">
-                        <span class="w-3 h-0.5 bg-blue-500"></span>
-                        <span class="text-gray-600 dark:text-gray-300">CSAT %</span>
-                    </div>
-                    <div class="flex items-center space-x-1.5">
-                        <span class="w-3 h-0.5 bg-emerald-500"></span>
-                        <span class="text-gray-600 dark:text-gray-300">Promotores %</span>
-                    </div>
-                </div>
+    // SIMULADOR AUDIO
+    let isPlaying = false;
+    function playSimulatedAudio() {
+      const icon = document.getElementById('playIcon');
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        icon.className = "fa-solid fa-pause text-xs";
+      } else {
+        icon.className = "fa-solid fa-play text-xs";
+      }
+    }
 
-                <!-- SIMULATED TREND SVG GRAPH WITH HOVER -->
-                <div class="h-64 relative flex items-center justify-center">
-                    <svg class="w-full h-full overflow-visible" viewBox="0 0 500 200">
-                        <!-- Grid lines -->
-                        <line x1="0" y1="40" x2="500" y2="40" stroke="#334155" stroke-dasharray="4" stroke-opacity="0.3"/>
-                        <line x1="0" y1="100" x2="500" y2="100" stroke="#334155" stroke-dasharray="4" stroke-opacity="0.3"/>
-                        <line x1="0" y1="160" x2="500" y2="160" stroke="#334155" stroke-dasharray="4" stroke-opacity="0.3"/>
-
-                        <!-- Promotores Line (Green) -->
-                        <path id="pathGreen" d="M 20 110 Q 120 80, 220 60 T 480 30" fill="none" stroke="#10b981" stroke-width="3"/>
-                        
-                        <!-- CSAT Line (Blue) -->
-                        <path id="pathBlue" d="M 20 70 Q 120 50, 220 40 T 480 20" fill="none" stroke="#3b82f6" stroke-width="3"/>
-
-                        <!-- Interactive Points CSAT (Blue) -->
-                        <circle cx="20" cy="70" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 1 - CSAT', '91.0% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-                        
-                        <circle cx="170" cy="48" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 3 - CSAT', '93.2% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <circle cx="330" cy="32" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 5 - CSAT', '94.2% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <circle cx="480" cy="20" r="6" class="fill-blue-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes actual - CSAT', '94.8% de satisfacción')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <!-- Interactive Points Promotores (Green) -->
-                        <circle cx="20" cy="110" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 1 - Promotores', '78.0% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <circle cx="170" cy="72" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 3 - Promotores', '81.0% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <circle cx="330" cy="45" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes 5 - Promotores', '82.5% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-
-                        <circle cx="480" cy="30" r="6" class="fill-emerald-500 cursor-pointer hover:r-8 transition-all"
-                                onmouseenter="showTooltip(event, 'Mes actual - Promotores', '83.1% de promotores')" onmouseleave="hideTooltip()" onmousemove="moveTooltip(event)"/>
-                    </svg>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- SCRIPT LOGIC -->
-    <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const icon = document.getElementById('themeIcon');
-            const text = document.getElementById('themeText');
-
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.className = 'fa-solid fa-moon text-slate-700';
-                text.innerText = 'Modo Oscuro';
-            } else {
-                html.classList.add('dark');
-                icon.className = 'fa-solid fa-sun text-yellow-400';
-                text.innerText = 'Modo Claro';
-            }
-        }
-
-        /* TOOLTIP CONTROLS */
-        const tooltip = document.getElementById('tooltip');
-
-        function showTooltip(e, title, val) {
-            tooltip.innerHTML = `<div class="font-bold text-bcd-accent">${title}</div><div>${val}</div>`;
-            tooltip.classList.remove('hidden');
-            moveTooltip(e);
-        }
-
-        function moveTooltip(e) {
-            tooltip.style.left = (e.clientX + 12) + 'px';
-            tooltip.style.top = (e.clientY + 12) + 'px';
-        }
-
-        function hideTooltip() {
-            tooltip.classList.add('hidden');
-        }
-
-        /* DYNAMIC FILTERS LOGIC */
-        function updateDashboard() {
-            const period = document.getElementById('filterPeriod').value;
-            const channel = document.getElementById('filterChannel').value;
-            const team = document.getElementById('filterTeam').value;
-            const type = document.getElementById('filterType').value;
-
-            // Base Values
-            let env = 184, resp = 142, csat = 94.8, det = 2;
-            let h1 = 6, h2 = 22, h3 = 38, h4 = 72, h5 = 96;
-
-            // Filter Channel Modifications
-            if (channel === 'whatsapp') {
-                csat += 2.3;
-                resp = Math.round(resp * 0.35);
-                env = Math.round(env * 0.35);
-                h4 = 80; h5 = 98; h1 = 2;
-            } else if (channel === 'email') {
-                csat -= 1.2;
-                resp = Math.round(resp * 0.45);
-                env = Math.round(env * 0.45);
-                h3 = 45; h4 = 65;
-            } else if (channel === 'phone') {
-                csat += 0.8;
-                resp = Math.round(resp * 0.20);
-                env = Math.round(env * 0.20);
-            }
-
-            // Filter Team Modifications
-            if (team === 'multi1') {
-                csat = 96.5;
-                det = 0;
-                env = Math.round(env * 0.5);
-                resp = Math.round(resp * 0.5);
-                h1 = 0; h5 = 99;
-            } else if (team === 'equipoA') {
-                csat = 93.9;
-            }
-
-            // Filter Period Modifications
-            if (period === '3m') {
-                env = Math.round(env * 0.5);
-                resp = Math.round(resp * 0.5);
-                csat = Math.min(99.0, csat + 1.2);
-            } else if (period === '1m') {
-                env = Math.round(env * 0.2);
-                resp = Math.round(resp * 0.2);
-                csat = Math.min(99.5, csat + 2.5);
-                det = 0;
-            }
-
-            // Calculate Response Rate
-            const tasa = ((resp / env) * 100).toFixed(1);
-
-            // Apply updates to UI
-            document.getElementById('kpiEnviadas').innerText = env;
-            document.getElementById('kpiRespondidas').innerText = resp;
-            document.getElementById('kpiCsat').innerText = csat.toFixed(1) + '%';
-            document.getElementById('kpiDetractores').innerText = det;
-            document.getElementById('kpiTasa').innerText = tasa + '%';
-            document.getElementById('kpiTasaSub').innerText = `${resp} respuestas de ${env} envíos`;
-
-            // Animate Bars
-            document.getElementById('bar1').style.height = h1 + '%';
-            document.getElementById('bar2').style.height = h2 + '%';
-            document.getElementById('bar3').style.height = h3 + '%';
-            document.getElementById('bar4').style.height = h4 + '%';
-            document.getElementById('bar5').style.height = h5 + '%';
-        }
-
-        function resetDashboard() {
-            document.getElementById('filterPeriod').value = '6m';
-            document.getElementById('filterType').value = 'all';
-            document.getElementById('filterChannel').value = 'all';
-            document.getElementById('filterTeam').value = 'all';
-            updateDashboard();
-        }
-    </script>
+    // INIT
+    renderTickets();
+    selectClient(1);
+  </script>
 </body>
 </html>
