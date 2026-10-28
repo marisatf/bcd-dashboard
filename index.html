@@ -17,11 +17,7 @@
               darkBlue: '#005bb5',
               lightBg: '#f3f4f5',
               border: '#d1d5db',
-              selectedBg: '#e0f2fe',
-              aiGreen: '#3b82f6',
-              tagGreen: '#a3e635',
-              prioritario: '#f59e0b',
-              otros: '#84cc16'
+              selectedBg: '#e0f2fe'
             }
           },
           fontFamily: {
@@ -48,35 +44,35 @@
   <!-- TOP HEADER FOCALSCOPE -->
   <header class="bg-[#0e71ce] text-white flex items-center justify-between px-3 py-1.5 shadow-md flex-shrink-0 z-20">
     <div class="flex items-center space-x-3">
-      <!-- ICONOS CANALES FIEL A LA IMAGEN -->
+      <!-- ICONOS CANALES FIEL A LA IMAGEN image_71b036.png -->
       <div class="flex items-center space-x-2">
         <!-- Correo (Naranja) -->
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition">
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition" title="Correo Electrónico">
           <i class="fa-regular fa-envelope text-lg"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
         <!-- Chat (Naranja) -->
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition">
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#f97316] shadow-sm cursor-pointer hover:bg-white transition" title="Chat Web">
           <i class="fa-regular fa-comments text-lg"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
         <!-- WhatsApp (Verde) -->
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+        <div onclick="switchTab('whatsapp')" class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition" title="WhatsApp Business">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
         <!-- Integración / Loop (Verde) -->
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
-          <i class="fa-solid fa-[#0e71ce] fa-arrows-rotate text-base"></i>
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition" title="Sincronización CRM">
+          <i class="fa-solid fa-arrows-rotate text-base text-[#16a34a]"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
         <!-- Notificaciones / Campana (Verde) -->
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition" title="Alertas de Servicio">
           <i class="fa-regular fa-bell text-lg"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
         <!-- Teléfono CTI (Verde) -->
-        <div onclick="toggleCTIModal()" class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition">
+        <div onclick="toggleCallHistoryModal()" class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#cbe5ff] text-[#16a34a] shadow-sm cursor-pointer hover:bg-white transition" title="Softphone CTI">
           <i class="fa-solid fa-phone text-base"></i>
           <span class="absolute -top-1 -right-1 bg-[#22c55e] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">0</span>
         </div>
@@ -91,7 +87,7 @@
           <span>EMAIL SEARCH</span>
         </button>
       </div>
-      <input type="text" placeholder="Quick find email" class="px-2 py-1 text-xs rounded text-gray-800 w-48 focus:outline-none focus:ring-1 focus:ring-blue-300">
+      <input type="text" id="quickFindInput" onkeyup="filterBySearchText()" placeholder="Quick find email" class="px-2 py-1 text-xs rounded text-gray-800 w-48 focus:outline-none focus:ring-1 focus:ring-blue-300">
       <div class="flex items-center space-x-1 pl-2 border-l border-blue-400/50">
         <div class="w-6 h-6 rounded-full bg-blue-800 flex items-center justify-center text-xs font-bold text-white">A</div>
         <span class="text-xs font-semibold">ADMIN1</span>
@@ -136,9 +132,9 @@
         <button class="px-1.5 py-0.5 text-gray-600 hover:text-black">CLOSED</button>
         <button class="px-1.5 py-0.5 text-gray-600 hover:text-black">ALL</button>
       </div>
-      <button onclick="toggleCTIModal()" class="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 rounded text-xs font-semibold flex items-center space-x-1 shadow-sm">
-        <i class="fa-solid fa-headset"></i>
-        <span>CTI Softphone / Grabaciones IA</span>
+      <button onclick="toggleCallHistoryModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded text-xs font-semibold flex items-center space-x-1 shadow-sm">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Historial Telefonía CTI</span>
       </button>
     </div>
   </div>
@@ -159,90 +155,78 @@
           <i class="fa-solid fa-chevron-down text-[9px]"></i>
         </div>
 
-        <div class="pl-2 pr-2 py-1">
-          <div class="flex items-center space-x-1 font-medium text-gray-700 py-1 px-1 rounded hover:bg-gray-100 cursor-pointer">
-            <i class="fa-solid fa-folder-minus text-amber-500"></i>
-            <span>Ticketboxes</span>
+        <div class="pl-2 pr-2 py-1 space-y-0.5">
+          <!-- CARPETA SHARED CONTACTS (ESTILO IMAGE_719972.PNG) -->
+          <div onclick="showSharedContacts()" id="folder-contacts" class="flex items-center space-x-2 px-2 py-1.5 rounded hover:bg-blue-100/70 text-gray-800 cursor-pointer font-semibold text-xs border border-transparent">
+            <i class="fa-solid fa-user-group text-blue-600 text-sm"></i>
+            <span>Shared Contacts</span>
           </div>
 
-          <!-- LISTA DE ZONAS Y DEPARTAMENTOS -->
-          <div class="pl-4 space-y-0.5">
-            <div onclick="filterFolder('all')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>000 Notas compartidas</span>
-              </div>
-            </div>
+          <div class="pt-2 pb-1 font-semibold text-gray-400 text-[10px] uppercase tracking-wider px-2">
+            Zonas Territoriales Active
+          </div>
 
-            <div onclick="filterFolder('Centro')" class="flex items-center justify-between px-2 py-1 rounded bg-blue-50 text-blue-700 font-medium cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-solid fa-folder text-blue-500"></i>
-                <span class="font-semibold">010 - Zona Centro</span>
-              </div>
-              <span class="text-[10px] bg-blue-200 text-blue-800 px-1 rounded font-bold">2</span>
+          <!-- LISTA DE ZONAS -->
+          <div onclick="filterFolder('all')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-regular fa-folder text-gray-400"></i>
+              <span>Todas las Solicitudes</span>
             </div>
+          </div>
 
-            <div onclick="filterFolder('Levante')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>020 - Zona Levante</span>
-              </div>
-              <span class="text-[10px] text-gray-500">2</span>
+          <div onclick="filterFolder('Centro')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-solid fa-folder text-blue-500"></i>
+              <span class="font-medium">010 - Zona Centro</span>
             </div>
+            <span class="text-[10px] bg-blue-100 text-blue-800 px-1 rounded font-bold">2</span>
+          </div>
 
-            <div onclick="filterFolder('Andalucia')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>030 - Zona Andalucía</span>
-              </div>
-              <span class="text-[10px] text-gray-500">1</span>
+          <div onclick="filterFolder('Levante')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-regular fa-folder text-gray-400"></i>
+              <span>020 - Zona Levante</span>
             </div>
+            <span class="text-[10px] text-gray-500">1</span>
+          </div>
 
-            <div onclick="filterFolder('Norte')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>040 - Norte y Cataluña</span>
-              </div>
-              <span class="text-[10px] text-gray-500">1</span>
+          <div onclick="filterFolder('Andalucia')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-regular fa-folder text-gray-400"></i>
+              <span>030 - Zona Andalucía</span>
             </div>
+            <span class="text-[10px] text-gray-500">1</span>
+          </div>
 
-            <div onclick="filterFolder('Mediadores')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>050 - Mediadores VIP</span>
-              </div>
+          <div onclick="filterFolder('Norte')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-regular fa-folder text-gray-400"></i>
+              <span>040 - Norte y Cataluña</span>
             </div>
+            <span class="text-[10px] text-gray-500">1</span>
+          </div>
 
-            <div onclick="filterFolder('Atencion')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>060 - At. Cliente & Coberturas</span>
-              </div>
+          <div onclick="filterFolder('Herencias')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-regular fa-folder text-gray-400"></i>
+              <span>070 - Gestoría / Herencias</span>
             </div>
-
-            <div onclick="filterFolder('Herencias')" class="flex items-center justify-between px-2 py-1 rounded hover:bg-blue-50 text-gray-700 cursor-pointer text-xs">
-              <div class="flex items-center space-x-1.5">
-                <i class="fa-regular fa-folder text-gray-400"></i>
-                <span>070 - Gestoría / Herencias</span>
-              </div>
-            </div>
+            <span class="text-[10px] text-gray-500">1</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- PANE CENTRAL: LISTA DE TICKETS -->
-    <div class="w-[520px] bg-white border-r border-gray-300 flex flex-col flex-shrink-0">
-      <!-- Search inside list -->
+    <div id="centralPane" class="w-[520px] bg-white border-r border-gray-300 flex flex-col flex-shrink-0">
       <div class="p-2 border-b border-gray-200 bg-gray-50 flex items-center space-x-2">
         <div class="relative flex-1">
           <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-gray-400 text-xs"></i>
-          <input type="text" placeholder="Search in folder, press Down key for options" class="w-full pl-8 pr-3 py-1 bg-white border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-500">
+          <input type="text" id="folderSearchInput" onkeyup="filterByFolderSearch()" placeholder="Search in folder, press Down key for options" class="w-full pl-8 pr-3 py-1 bg-white border border-gray-300 rounded text-xs focus:outline-none focus:border-blue-500">
         </div>
         <button class="text-gray-500 hover:text-gray-700 p-1"><i class="fa-solid fa-sliders text-xs"></i></button>
       </div>
 
-      <!-- Headers de Tabla -->
       <div class="grid grid-cols-12 bg-gray-100 border-b border-gray-200 py-1 px-2 text-[11px] font-semibold text-gray-500 uppercase">
         <div class="col-span-1"></div>
         <div class="col-span-3">From</div>
@@ -250,279 +234,266 @@
         <div class="col-span-2 text-right">Date</div>
       </div>
 
-      <!-- Lista de Clientes Active Seguros -->
       <div id="ticketList" class="flex-1 overflow-y-auto custom-scrollbar divide-y divide-gray-100 text-xs">
         <!-- Generado dinámicamente -->
       </div>
     </div>
 
-    <!-- PANE DERECHO: VISTA 360 CLIENTE Y TIMELINE -->
-    <div class="flex-1 bg-white flex flex-col overflow-hidden">
-      <!-- Header Ficha Cliente -->
-      <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-start justify-between">
-        <div class="flex items-start space-x-3">
-          <img id="clientAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-full object-cover border-2 border-blue-500 shadow-sm">
-          <div>
-            <div class="flex items-center space-x-2">
-              <h2 id="clientName" class="text-base font-bold text-gray-800">Elena Morales</h2>
-              <span id="clientTag" class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-300">PÓLIZA ACTIVE FAMILIAR</span>
-            </div>
-            <p id="clientSub" class="text-xs text-gray-500 mt-0.5">Tomador: Elena Morales | DNI: 47823910R | Zona Centro (Madrid)</p>
-            <p id="clientMediator" class="text-[11px] text-gray-600 mt-0.5"><i class="fa-solid fa-briefcase text-gray-400 mr-1"></i>Mediador: Correduría Naranjo & Asociados (#8871)</p>
-          </div>
-        </div>
-
-        <!-- CRM POLIZAS WIDGET -->
-        <div class="bg-white border border-gray-200 rounded p-2 text-right shadow-sm max-w-xs">
-          <span class="text-[10px] uppercase font-bold text-gray-400 block mb-1">Pólizas Activas en CRM (Active)</span>
-          <div id="clientPolicies" class="space-y-1 text-[11px]">
-            <div class="flex justify-between items-center space-x-2 bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
-              <span class="font-semibold">Decesos & Asistencia:</span>
-              <span class="font-mono text-[10px]">#ACT-99482</span>
-            </div>
-            <div class="flex justify-between items-center space-x-2 bg-blue-50 text-blue-800 px-1.5 py-0.5 rounded border border-blue-200">
-              <span class="font-semibold">Cuadro Dental Gratuito:</span>
-              <span class="font-bold">Incluido</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TABS DE CANALES MULTICANAL -->
-      <div class="bg-gray-100 border-b border-gray-200 flex items-center px-3 space-x-1 text-xs">
-        <button onclick="switchTab('email')" id="tab-email" class="px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5">
-          <i class="fa-regular fa-envelope"></i>
-          <span>CORREO ELECTRÓNICO</span>
-        </button>
-        <button onclick="switchTab('whatsapp')" id="tab-whatsapp" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
-          <i class="fa-brands fa-whatsapp text-green-600"></i>
-          <span>WHATSAPP VIVO</span>
-        </button>
-        <button onclick="switchTab('call')" id="tab-call" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
-          <i class="fa-solid fa-phone text-blue-500"></i>
-          <span>LLAMADAS & TRANSCRIPCIÓN IA</span>
-        </button>
-      </div>
-
-      <!-- CONTENIDO DE LOS TABS -->
-      <div class="flex-1 overflow-y-auto custom-scrollbar p-4 bg-gray-50">
-
-        <!-- TAB EMAIL -->
-        <div id="view-email" class="space-y-4">
-          <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-3">
+    <!-- PANE DERECHO: VISTA 360 Y CONTACTOS -->
+    <div id="rightPane" class="flex-1 bg-white flex flex-col overflow-hidden">
+      <!-- VISTA VIVO DEL CLIENTE SELECCIONADO -->
+      <div id="clientDetailView" class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header Ficha Cliente -->
+        <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-start justify-between">
+          <div class="flex items-start space-x-3">
+            <img id="clientAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-full object-cover border-2 border-blue-500 shadow-sm">
+            <div>
               <div class="flex items-center space-x-2">
-                <span id="emailBadge" class="bg-lime-400 text-gray-900 font-bold text-[10px] px-2 py-0.5 rounded">Reserva: Consulta [AI]</span>
-                <h3 id="emailSubject" class="font-bold text-gray-800 text-sm">RE: Solicitud Limpieza Dental Gratuita y Cuadro Médico</h3>
+                <h2 id="clientName" class="text-base font-bold text-gray-800">Elena Morales</h2>
+                <span id="clientTag" class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-300">PÓLIZA ACTIVE FAMILIAR</span>
               </div>
-              <span id="emailDate" class="text-xs text-gray-400">23 Jul 2026 - 09:15</span>
-            </div>
-            <div id="emailBody" class="text-xs text-gray-700 leading-relaxed space-y-2">
-              <p>Estimados señores de Active Seguros,</p>
-              <p>Les escribo en relación a mi póliza de asistencia familiar. Quisiera pedir cita para realizarme la limpieza dental gratuita anual que incluye mi cobertura y consultar si el centro odontológico de la C/ Velázquez entra dentro del cuadro dental gratuito.</p>
-              <p>Quedo a la espera de su respuesta para confirmar horario.</p>
-              <p>Un cordial saludo,<br><strong id="emailSender">Elena Morales</strong></p>
+              <p id="clientSub" class="text-xs text-gray-500 mt-0.5">Tomador: Elena Morales | DNI: 47823910R | Zona Centro (Madrid)</p>
+              <p id="clientMediator" class="text-[11px] text-gray-600 mt-0.5"><i class="fa-solid fa-briefcase text-gray-400 mr-1"></i>Mediador: Correduría Naranjo & Asociados (#8871)</p>
             </div>
           </div>
 
-          <!-- RESPONDEDOR CON IA -->
-          <div class="bg-white border border-blue-200 rounded-lg p-3 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-blue-700 flex items-center">
-                <i class="fa-solid fa-robot mr-1.5"></i>
-                FocalScope Agent Assist (Respuesta Sugerida por IA)
+          <!-- CRM POLIZAS WIDGET -->
+          <div class="bg-white border border-gray-200 rounded p-2 text-right shadow-sm max-w-xs">
+            <span class="text-[10px] uppercase font-bold text-gray-400 block mb-1">Pólizas Activas en CRM (Active)</span>
+            <div id="clientPolicies" class="space-y-1 text-[11px]">
+              <!-- Dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS DE CANALES MULTICANAL -->
+        <div class="bg-gray-100 border-b border-gray-200 flex items-center px-3 space-x-1 text-xs">
+          <button onclick="switchTab('email')" id="tab-email" class="px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5">
+            <i class="fa-regular fa-envelope"></i>
+            <span>CORREO ELECTRÓNICO</span>
+          </button>
+          <button onclick="switchTab('whatsapp')" id="tab-whatsapp" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
+            <i class="fa-brands fa-whatsapp text-green-600"></i>
+            <span>WHATSAPP VIVO</span>
+          </button>
+          <button onclick="switchTab('call')" id="tab-call" class="px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium">
+            <i class="fa-solid fa-phone text-blue-500"></i>
+            <span>LLAMADAS & TRANSCRIPCIÓN IA</span>
+          </button>
+        </div>
+
+        <!-- CONTENIDO DE LOS TABS -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 bg-gray-50">
+
+          <!-- TAB EMAIL -->
+          <div id="view-email" class="space-y-4">
+            <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+              <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-3">
+                <div class="flex items-center space-x-2">
+                  <span id="emailBadge" class="bg-lime-400 text-gray-900 font-bold text-[10px] px-2 py-0.5 rounded">Consulta [AI]</span>
+                  <h3 id="emailSubject" class="font-bold text-gray-800 text-sm">RE: Solicitud Limpieza Dental Gratuita</h3>
+                </div>
+                <span id="emailDate" class="text-xs text-gray-400">28 Oct 2026 - 10:49</span>
+              </div>
+              <div class="text-xs text-gray-500 mb-2 font-medium">De: <span id="emailSender" class="font-bold text-gray-800">Elena Morales</span></div>
+              <div id="emailBody" class="text-xs text-gray-700 leading-relaxed space-y-2">
+                <!-- Dinámico -->
+              </div>
+            </div>
+
+            <!-- RESPONDEDOR CON IA -->
+            <div class="bg-white border border-blue-200 rounded-lg p-3 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-blue-700 flex items-center">
+                  <i class="fa-solid fa-robot mr-1.5"></i>
+                  FocalScope Agent Assist (Respuesta Sugerida por IA)
+                </span>
+                <button onclick="insertAiResponse()" class="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-2.5 py-1 rounded shadow-sm">
+                  Insertar Borrador IA
+                </button>
+              </div>
+              <textarea id="replyBox" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" placeholder="Escriba su respuesta o use Agent Assist..."></textarea>
+              <div class="flex justify-between items-center mt-2">
+                <div class="flex space-x-1">
+                  <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-paperclip text-xs"></i></button>
+                  <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-face-smile text-xs"></i></button>
+                </div>
+                <button onclick="sendInlineReply()" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded font-medium hover:bg-blue-700">Enviar Respuesta</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB WHATSAPP -->
+          <div id="view-whatsapp" class="hidden h-full flex flex-col rounded-lg border border-gray-300 overflow-hidden shadow-sm">
+            <div class="bg-gray-100 border-b border-gray-300 px-3 py-2 flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2">
+                <i class="fa-brands fa-whatsapp text-green-600 text-base"></i>
+                <span id="waPhone" class="font-bold text-gray-700">+34 612 884 920</span>
+                <span class="text-gray-400">|</span>
+                <span id="waClient" class="text-gray-600">Elena Morales</span>
+              </div>
+              <span class="text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded font-medium">
+                Consentimiento HSM verificado
               </span>
-              <button onclick="insertAiResponse()" class="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-2.5 py-1 rounded shadow-sm">
-                Insertar Borrador IA
+            </div>
+
+            <div class="flex-1 p-4 whatsapp-bg overflow-y-auto space-y-3 text-xs">
+              <div class="bg-[#dcf8c6]/60 border border-green-300 rounded p-2 text-center text-[11px] text-gray-700 max-w-md mx-auto">
+                <i class="fa-solid fa-circle-info text-green-600 mr-1"></i>
+                System: Plantilla de bienvenida HSM enviada. Conversación iniciada.
+              </div>
+
+              <div class="flex flex-col items-start">
+                <div class="bg-white rounded-lg p-2.5 shadow-sm max-w-sm border border-gray-200">
+                  <span id="waSenderName" class="font-bold text-blue-600 text-[10px] block mb-0.5">Elena Morales</span>
+                  <p id="waText1">Hola, buenos días...</p>
+                  <span class="text-[9px] text-gray-400 block text-right mt-1">10:12 AM <i class="fa-solid fa-check text-blue-500"></i></span>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-end">
+                <div class="bg-[#dcf8c6] rounded-lg p-2.5 shadow-sm max-w-sm border border-green-200">
+                  <span class="font-bold text-green-800 text-[10px] block mb-0.5">Agente (FocalScope)</span>
+                  <p id="waText2">¡Hola! En un momento le atendemos.</p>
+                  <span class="text-[9px] text-gray-400 block text-right mt-1">10:14 AM <i class="fa-solid fa-check-double text-blue-500"></i></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white border-t border-gray-300 p-2 flex items-center space-x-2">
+              <input type="text" id="waReplyInput" placeholder="Escribir mensaje por WhatsApp..." class="flex-1 text-xs border border-gray-300 rounded-full px-3 py-1.5 focus:outline-none focus:border-green-500">
+              <button onclick="sendWaReply()" class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-700">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
               </button>
             </div>
-            <textarea id="replyBox" rows="4" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" placeholder="Escriba su respuesta o use Agent Assist..."></textarea>
-            <div class="flex justify-between items-center mt-2">
-              <div class="flex space-x-1">
-                <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-paperclip text-xs"></i></button>
-                <button class="p-1 text-gray-500 hover:text-black"><i class="fa-solid fa-face-smile text-xs"></i></button>
+          </div>
+
+          <!-- TAB CALL & IA -->
+          <div id="view-call" class="hidden space-y-4">
+            <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                <div class="flex items-center space-x-2">
+                  <span class="bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded">LLAMADA REGISTRADA</span>
+                  <span id="callCode" class="font-bold text-gray-800 text-xs">Transcripción de IA #1000000000486</span>
+                </div>
+                <span id="callDuration" class="text-xs text-gray-500">Español (España) | Duración: 01:11</span>
               </div>
-              <button class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded font-medium hover:bg-blue-700">Enviar Respuesta</button>
+
+              <div class="bg-gray-100 rounded-lg p-3 flex items-center space-x-3 border border-gray-200">
+                <button onclick="playSimulatedAudio()" class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
+                  <i id="playIcon" class="fa-solid fa-play text-xs"></i>
+                </button>
+                <div class="flex-1">
+                  <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
+                    <div id="audioProgress" class="bg-blue-600 h-full w-1/3"></div>
+                  </div>
+                  <div class="flex justify-between text-[10px] text-gray-500 mt-1 font-mono">
+                    <span id="audioTimer">00:22</span>
+                    <span id="audioTotal">01:11</span>
+                  </div>
+                </div>
+                <i class="fa-solid fa-volume-high text-gray-500 text-xs"></i>
+              </div>
+
+              <!-- Transcripción dinámicamente personalizada -->
+              <div id="callTranscript" class="space-y-2 text-xs bg-gray-50 p-3 rounded border border-gray-200 max-h-40 overflow-y-auto custom-scrollbar">
+                <!-- Dinámico -->
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="bg-blue-50 border border-blue-200 rounded p-2.5 text-xs">
+                  <span class="font-bold text-blue-900 block mb-1"><i class="fa-solid fa-tag text-blue-600 mr-1"></i> Categorías de IA</span>
+                  <div class="flex justify-between items-center text-[11px] mb-1">
+                    <span class="text-gray-600">Intención:</span>
+                    <span id="aiIntent" class="font-bold text-blue-700">CONSULTA COBERTURA</span>
+                  </div>
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="text-gray-600">Puntuación Calidad:</span>
+                    <span class="font-bold text-green-600">10 / 10</span>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 border border-gray-200 rounded p-2.5 text-xs">
+                  <span class="font-bold text-gray-800 block mb-1"><i class="fa-solid fa-list-check text-gray-600 mr-1"></i> Puntos Clave de IA</span>
+                  <ul id="aiBullets" class="list-disc list-inside text-[11px] text-gray-600 space-y-0.5">
+                    <!-- Dinámico -->
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
-
-        <!-- TAB WHATSAPP FIEL A FOCALSCOPE -->
-        <div id="view-whatsapp" class="hidden h-full flex flex-col rounded-lg border border-gray-300 overflow-hidden shadow-sm">
-          <div class="bg-gray-100 border-b border-gray-300 px-3 py-2 flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-2">
-              <i class="fa-brands fa-whatsapp text-green-600 text-base"></i>
-              <span id="waPhone" class="font-bold text-gray-700">+34 612 884 920</span>
-              <span class="text-gray-400">|</span>
-              <span id="waClient" class="text-gray-600">Elena Morales</span>
-            </div>
-            <div class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Consentimiento HSM verificado
-            </div>
-          </div>
-
-          <!-- CHAT BODY -->
-          <div class="flex-1 p-4 whatsapp-bg overflow-y-auto space-y-3 text-xs">
-            <!-- System Notice Box (Exacto a la imagen) -->
-            <div class="bg-[#dcf8c6]/60 border border-green-300 rounded p-2 text-center text-[11px] text-gray-700 max-w-md mx-auto">
-              <i class="fa-solid fa-circle-info text-green-600 mr-1"></i>
-              System: Plantilla de bienvenida HSM enviada correctamente. El cliente ha iniciado conversación voluntaria.
-            </div>
-
-            <!-- Cliente Bubble -->
-            <div class="flex flex-col items-start">
-              <div class="bg-white rounded-lg p-2.5 shadow-sm max-w-sm border border-gray-200">
-                <span id="waSenderName" class="font-bold text-blue-600 text-[10px] block mb-0.5">Elena Morales</span>
-                <p id="waText1">Hola, buenos días. ¿El servicio de manitas para colgar una lámpara en casa entra en mi seguro con Active?</p>
-                <span class="text-[9px] text-gray-400 block text-right mt-1">10:12 AM <i class="fa-solid fa-check text-blue-500"></i></span>
-              </div>
-            </div>
-
-            <!-- Agente Human Bubble -->
-            <div class="flex flex-col items-end">
-              <div class="bg-[#dcf8c6] rounded-lg p-2.5 shadow-sm max-w-sm border border-green-200">
-                <span class="font-bold text-green-800 text-[10px] block mb-0.5">Agente (FocalScope)</span>
-                <p id="waText2">¡Hola, Elena! Sí, exactamente. Tu póliza Active Asistencia Familiar incluye 3 horas anuales de servicio Manitas del Hogar gratis. ¿Quieres que te envíe un operario esta semana?</p>
-                <span class="text-[9px] text-gray-400 block text-right mt-1">10:14 AM <i class="fa-solid fa-check-double text-blue-500"></i></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- INPUT CHAT -->
-          <div class="bg-white border-t border-gray-300 p-2 flex items-center space-x-2">
-            <input type="text" placeholder="Escribir mensaje por WhatsApp..." class="flex-1 text-xs border border-gray-300 rounded-full px-3 py-1.5 focus:outline-none focus:border-green-500">
-            <button class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-700">
-              <i class="fa-solid fa-paper-plane text-xs"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- TAB CALL & IA (EXACTO A LA IMAGEN) -->
-        <div id="view-call" class="hidden space-y-4">
-          <!-- CTI PLAYER & IA TRANSCRIPTION -->
-          <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-sm space-y-3">
-            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
-              <div class="flex items-center space-x-2">
-                <span class="bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded">LLAMADA REGISTRADA</span>
-                <span class="font-bold text-gray-800 text-xs">Transcripción de IA #1000000000486</span>
-              </div>
-              <span class="text-xs text-gray-500">Español (España) | Duración: 01:11</span>
-            </div>
-
-            <!-- Reproductor de Audio -->
-            <div class="bg-gray-100 rounded-lg p-3 flex items-center space-x-3 border border-gray-200">
-              <button onclick="playSimulatedAudio()" class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
-                <i id="playIcon" class="fa-solid fa-play text-xs"></i>
-              </button>
-              <div class="flex-1">
-                <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
-                  <div id="audioProgress" class="bg-blue-600 h-full w-1/3"></div>
-                </div>
-                <div class="flex justify-between text-[10px] text-gray-500 mt-1 font-mono">
-                  <span>00:22</span>
-                  <span>01:11</span>
-                </div>
-              </div>
-              <i class="fa-solid fa-volume-high text-gray-500 text-xs"></i>
-            </div>
-
-            <!-- Transcripción Temporalizada -->
-            <div class="space-y-2 text-xs bg-gray-50 p-3 rounded border border-gray-200 max-h-40 overflow-y-auto custom-scrollbar">
-              <div class="flex space-x-2">
-                <span class="font-mono text-blue-600 text-[10px]">00:00</span>
-                <p><strong>Agente Active:</strong> Gracias por llamar a Active Seguros, le atiende Carlos. ¿En qué puedo ayudarle hoy?</p>
-              </div>
-              <div class="flex space-x-2">
-                <span class="font-mono text-blue-600 text-[10px]">00:10</span>
-                <p><strong id="callClientName">Elena Morales:</strong> Hola, llamaba para consultar sobre la elaboración del testamento online. ¿Tengo que pagar algún extra con mi seguro?</p>
-              </div>
-              <div class="flex space-x-2">
-                <span class="font-mono text-blue-600 text-[10px]">00:18</span>
-                <p><strong>Agente Active:</strong> No, Elena. Su modalidad Active Asistencia incluye el asesoramiento jurídico completo y la tramitación del testamento ante notario sin coste adicional.</p>
-              </div>
-            </div>
-
-            <!-- Resumen e Intención IA (Semiautómata) -->
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <div class="bg-blue-50 border border-blue-200 rounded p-2.5 text-xs">
-                <span class="font-bold text-blue-900 block mb-1"><i class="fa-solid fa-tag text-blue-600 mr-1"></i> Categorías de IA</span>
-                <div class="flex justify-between items-center text-[11px] mb-1">
-                  <span class="text-gray-600">Intención:</span>
-                  <span class="font-bold text-blue-700">CONSULTA COBERTURA / TESTAMENTO</span>
-                </div>
-                <div class="flex justify-between items-center text-[11px]">
-                  <span class="text-gray-600">Puntuación Calidad:</span>
-                  <span class="font-bold text-green-600">10 / 10</span>
-                </div>
-              </div>
-
-              <div class="bg-gray-50 border border-gray-200 rounded p-2.5 text-xs">
-                <span class="font-bold text-gray-800 block mb-1"><i class="fa-solid fa-list-check text-gray-600 mr-1"></i> Puntos Clave de IA</span>
-                <ul class="list-disc list-inside text-[11px] text-gray-600 space-y-0.5">
-                  <li>Consulta sobre testamento ante notario.</li>
-                  <li>Confirmada gratuidad por póliza activa.</li>
-                  <li>Se envía enlace de acceso a la app.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- VISTA DIRECCION / CARGADOR DE CONTACTOS -->
+      <div id="sharedContactsView" class="hidden flex-1 flex flex-col p-4 bg-gray-100 overflow-y-auto custom-scrollbar">
+        <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-sm mb-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-gray-800 flex items-center">
+              <i class="fa-solid fa-address-book text-blue-600 mr-2"></i>
+              Shared Contacts Directory (Directorio de Asegurados Active)
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5">Módulo para carga, gestión y sincronización de fichas completas de clientes y mediadores.</p>
+          </div>
+          <button class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1.5 rounded font-semibold flex items-center space-x-1 shadow-sm">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Importar Datos (CSV / CRM)</span>
+          </button>
+        </div>
+
+        <div id="contactsGrid" class="grid grid-cols-2 gap-4">
+          <!-- Dinámico -->
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- CTI SOFTPHONE MODAL FLOTANTE (REPLICA EXACTA DE LA IMAGEN) -->
-  <div id="ctiModal" class="hidden fixed bottom-4 right-4 w-96 bg-white rounded-lg shadow-2xl border border-gray-300 z-50 overflow-hidden">
-    <!-- Header Softphone -->
-    <div class="bg-[#0e71ce] text-white p-3 flex items-center justify-between">
+  <!-- POPUP HISTORIAL DE TELEFONÍA CTI FOCALSCOPE (CALCADO A IMAGE_719D33.JPG) -->
+  <div id="callHistoryModal" class="fixed top-16 left-1/3 w-[380px] bg-white rounded-lg shadow-2xl border border-gray-400 z-50 overflow-hidden text-xs">
+    
+    <div class="bg-[#8cc63f] text-white px-3 py-1.5 flex items-center justify-between font-bold text-xs">
       <div class="flex items-center space-x-2">
-        <span class="bg-green-500 w-2.5 h-2.5 rounded-full animate-pulse"></span>
-        <span class="font-bold text-xs">Softphone CTI - Extension 4082</span>
+        <i class="fa-solid fa-phone-volume"></i>
+        <span>Ready - CTI Telephony Active</span>
       </div>
-      <button onclick="toggleCTIModal()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex items-center space-x-2 text-white/90">
+        <span class="bg-blue-800 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">A</span>
+        <button onclick="toggleCallHistoryModal()" class="hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
     </div>
 
-    <!-- Agent info bar -->
-    <div class="bg-blue-50 px-3 py-2 border-b border-blue-100 flex items-center justify-between text-xs">
-      <div class="flex items-center space-x-2">
-        <div class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">K</div>
-        <span class="font-semibold text-gray-700">KASPER (Agente Senior)</span>
-      </div>
-      <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded">Listo para llamadas</span>
+    <div class="bg-blue-100 border-b border-blue-200 px-3 py-1.5 flex items-center justify-around text-blue-700 text-sm">
+      <button class="hover:text-blue-900"><i class="fa-regular fa-user"></i></button>
+      <button class="hover:text-blue-900"><i class="fa-regular fa-address-book"></i></button>
+      <button class="hover:text-blue-900"><i class="fa-solid fa-phone"></i></button>
+      <button class="text-blue-900 border-b-2 border-blue-900 pb-0.5"><i class="fa-solid fa-clock-rotate-left"></i></button>
+      <button class="hover:text-blue-900"><i class="fa-solid fa-grip font-bold"></i></button>
+      <button class="hover:text-blue-900"><i class="fa-regular fa-star"></i></button>
     </div>
 
-    <!-- Call Log List (Fiel a la foto) -->
-    <div class="p-2 bg-gray-50 max-h-60 overflow-y-auto space-y-1.5 text-xs">
-      <div class="bg-white p-2 rounded border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="bg-red-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">CAMBIO DE REGISTRO</span>
-          <p class="font-bold text-gray-800 mt-1">441135195310</p>
-          <p class="text-[10px] text-gray-400">Active - Zona Centro</p>
-        </div>
-        <div class="text-right text-[10px] text-gray-500">
-          <span>01:11</span>
-          <span class="block text-green-600 font-bold">#1-488</span>
-        </div>
+    <div class="bg-gray-100 border-b border-gray-200 px-2 py-1 flex items-center justify-between text-[11px] font-semibold text-gray-600">
+      <div class="flex space-x-2">
+        <button class="text-gray-500 hover:text-black">MISSED</button>
+        <button class="text-gray-500 hover:text-black">VOICEMAIL</button>
+        <button class="text-gray-500 hover:text-black">INBOUND</button>
+        <button class="text-blue-700 font-bold border-b border-blue-700">ALL</button>
       </div>
+      <span class="text-[10px] text-gray-500 flex items-center"><i class="fa-solid fa-thumbtack mr-1 text-[9px]"></i> HISTORIAL CLIENTES</span>
+    </div>
 
-      <div class="bg-white p-2 rounded border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="bg-red-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">FACTURACIÓN</span>
-          <p class="font-bold text-gray-800 mt-1">441135195310</p>
-          <p class="text-[10px] text-gray-400">Active - Mediadores</p>
-        </div>
-        <div class="text-right text-[10px] text-gray-500">
-          <span>01:03</span>
-          <span class="block text-green-600 font-bold">#1-487</span>
-        </div>
-      </div>
+    <div class="p-1.5 bg-gray-50 border-b border-gray-200">
+      <input type="text" placeholder="Buscar por cliente o teléfono..." class="w-full text-[11px] px-2 py-0.5 border border-gray-300 rounded focus:outline-none">
+    </div>
+
+    <div id="ctiCallHistoryList" class="max-h-72 overflow-y-auto custom-scrollbar divide-y divide-gray-100 text-[11px]">
+      <!-- Generado dinámicamente -->
     </div>
   </div>
 
-  <!-- SCRIPT CON DATOS Y LOGICA COMPLETA -->
+  <!-- SCRIPT CON DATOS 100% UNICOS Y SINCRONIZACION ABSOLUTA -->
   <script>
-    // BASE DE DATOS DE CLIENTES ACTIVE SEGUROS
     const clientsData = [
       {
         id: 1,
@@ -530,18 +501,31 @@
         name: 'Elena Morales',
         dni: '47823910R',
         sub: 'Tomador: Elena Morales | DNI: 47823910R | Zona Centro (Madrid)',
+        address: 'Calle Velázquez 42, 3ºA, 28001 Madrid',
         mediator: 'Correduría Naranjo & Asociados (#8871)',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE FAMILIAR',
         policy1: 'Decesos & Asistencia: #ACT-99482',
         policy2: 'Cuadro Dental Gratuito: Incluido',
-        tagColor: 'Reserva: Consulta [AI]',
-        subject: 'RE: Solicitud Limpieza Dental Gratuita y Cuadro Médico',
+        tagColor: 'Consulta [AI]',
+        subject: 'RE: Solicitud Limpieza Dental Gratuita en C/ Velázquez',
         date: '10:49',
         phone: '+34 612 884 920',
-        emailBody: 'Estimados señores de Active Seguros,<br><br>Les escribo en relación a mi póliza de asistencia familiar. Quisiera pedir cita para realizarme la limpieza dental gratuita anual que incluye mi cobertura y consultar si el centro odontológico de la C/ Velázquez entra dentro del cuadro dental gratuito.<br><br>Quedo a la espera de su respuesta.<br>Un saludo,<br><strong>Elena Morales</strong>',
+        emailBody: 'Estimados señores de Active Seguros,<br><br>Les escribo en relación a mi póliza de asistencia familiar #ACT-99482. Quisiera pedir cita para realizarme la limpieza dental gratuita anual que incluye mi cobertura y consultar si la clínica de la C/ Velázquez entra dentro del cuadro dental gratuito.<br><br>Quedo a la espera de su respuesta.<br>Un saludo,<br><strong>Elena Morales</strong>',
         waMessage: 'Hola, buenos días. ¿El servicio de manitas para colgar una lámpara en casa entra en mi seguro con Active?',
-        waReply: '¡Hola, Elena! Sí, exactamente. Tu póliza Active Asistencia Familiar incluye 3 horas anuales de servicio Manitas del Hogar gratis.'
+        waReply: '¡Hola, Elena! Sí, exactamente. Tu póliza Active Asistencia Familiar incluye 3 horas anuales de servicio Manitas del Hogar gratis. ¿Te enviamos un técnico esta semana?',
+        callCode: 'Transcripción de IA #1000000000486',
+        callDuration: 'Español (España) | Duración: 01:11',
+        callTag: 'CONSULTA',
+        callRef: '#1~6079',
+        callDate: '14 Sep 18:04',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Gracias por llamar a Active Seguros, le atiende Carlos. ¿En qué puedo ayudarle hoy?' },
+          { time: '00:10', speaker: 'Elena Morales', text: 'Hola, llamaba para consultar sobre la elaboración del testamento online notarial.' },
+          { time: '00:18', speaker: 'Agente Active', text: 'Su modalidad Active Asistencia incluye el asesoramiento jurídico completo y la cita ante notario sin coste adicional.' }
+        ],
+        aiIntent: 'CONSULTA COBERTURA / DENTAL',
+        aiBullets: ['Consulta sobre limpieza dental anual.', 'Confirmada cita gratuita ante notario.', 'Enviado enlace de acceso a la app.']
       },
       {
         id: 2,
@@ -549,18 +533,31 @@
         name: 'Carlos Mendoza',
         dni: '53210984P',
         sub: 'Tomador: Carlos Mendoza | DNI: 53210984P | Zona Centro (Toledo)',
+        address: 'Av. Reconquista 12, 1ºB, 45004 Toledo',
         mediator: 'Gestoría & Seguros Iberia (#1022)',
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE SENIOR',
         policy1: 'Decesos & Asistencia: #ACT-10293',
         policy2: 'Telemedicina 24h: Activa',
-        tagColor: 'Prioritario',
-        subject: 'Consulta urgente: Asesoramiento sobre Testamento Online',
+        tagColor: 'Contratación [AI]',
+        subject: 'Solicitud activación de servicio Borrado Digital y Telemedicina 24h',
         date: '10:43',
         phone: '+34 655 410 992',
-        emailBody: 'Buenas tardes,<br><br>Quisiera tramitar el borrador del testamento online que incluye mi seguro de asistencia. ¿Me pueden indicar qué pasos seguir o enviarme el enlace de acceso al portal de la gestoría?<br><br>Gracias,<br><strong>Carlos Mendoza</strong>',
-        waMessage: 'Hola, ¿dónde puedo ver la lista de médicos especialistas de la app TuSalud?',
-        waReply: 'Hola Carlos, puedes acceder directamente descargando la app TuSalud Active e introduciendo tu DNI 53210984P.'
+        emailBody: 'Buenas tardes,<br><br>Acabo de contratar el suplemento Senior y quisiera activar la app TuSalud Active para videoconsultas médicas 24 horas y el módulo de borrado de huella digital en internet.<br><br>Gracias,<br><strong>Carlos Mendoza</strong>',
+        waMessage: 'Hola, ¿dónde puedo ver la lista de médicos especialistas en Toledo dentro de la app TuSalud?',
+        waReply: 'Hola Carlos, puedes acceder directamente introduciendo tu DNI 53210984P en la app TuSalud Active o te enviamos el PDF al correo.',
+        callCode: 'Transcripción de IA #1000000000512',
+        callDuration: 'Español (España) | Duración: 02:05',
+        callTag: 'CONTRATACIÓN',
+        callRef: '#1~5872',
+        callDate: '11 Sep 09:02',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Active Seguros, le atiende Marta. ¿Dígame?' },
+          { time: '00:08', speaker: 'Carlos Mendoza', text: 'Buenas, quería saber si el transporte en ambulancia asistida para revisiones médicas periódicas está incluido en mi póliza Senior.' },
+          { time: '00:22', speaker: 'Agente Active', text: 'Sí, Don Carlos, siempre que sea prescrito por su médico habitual, el transporte asistido está 100% cubierto.' }
+        ],
+        aiIntent: 'CONTRATACIÓN / TELEMEDICINA',
+        aiBullets: ['Activado módulo TuSalud 24h.', 'Confirmada cobertura de traslado asistido.', 'Envío de credenciales por email.']
       },
       {
         id: 3,
@@ -568,18 +565,31 @@
         name: 'Javier Gómez',
         dni: '20918273K',
         sub: 'Tomador: Javier Gómez | DNI: 20918273K | Zona Levante (Valencia)',
+        address: 'Carrer de Colón 18, 46004 València',
         mediator: 'Seguros Mediterráneo (#4401)',
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE PRIMA NIVELADA',
         policy1: 'Decesos & Asistencia: #ACT-77120',
         policy2: 'Asistencia en Viaje: Mundial',
-        tagColor: 'Asistencia [AI]',
-        subject: 'Solicitud certificado de cobertura para viaje al extranjero',
+        tagColor: 'Baja [AI]',
+        subject: 'Solicitud de certificado de asistencia médica en inglés para viaje a Italia',
         date: '10:33',
         phone: '+34 688 331 002',
-        emailBody: 'Estimados,<br><br>Viajo la semana que viene fuera de España y necesitaría la acreditación en inglés de la cobertura médica y de asistencia en viaje que incluye mi seguro.<br><br>Atentamente,<br><strong>Javier Gómez</strong>',
-        waMessage: 'Buenos días, necesito confirmación de si el seguro cubre repatriación o asistencia médica en Italia.',
-        waReply: 'Hola Javier. Sí, tu seguro cubre asistencia médica hasta 15.000€ y repatriación completa en todo el mundo.'
+        emailBody: 'Estimados,<br><br>Viajo la semana que viene a Roma por trabajo y la empresa me pide un certificado oficial en inglés que acredite mi cobertura de gastos médicos y repatriación en el extranjero.<br><br>Atentamente,<br><strong>Javier Gómez</strong>',
+        waMessage: 'Buenos días, ¿me podéis confirmar si la repatriación médica por enfermedad en la UE no tiene límite de capital?',
+        waReply: 'Hola Javier. Así es, tu póliza Active Prima Nivelada incluye repatriación ilimitada y hasta 15.000€ en gastos médicos de urgencia.',
+        callCode: 'Transcripción de IA #1000000000590',
+        callDuration: 'Español (España) | Duración: 01:30',
+        callTag: 'BAJA / REVISIÓN',
+        callRef: '#1~5871',
+        callDate: '11 Sep 09:01',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Atención al Cliente Active Seguros, ¿en qué le podemos ayudar?' },
+          { time: '00:12', speaker: 'Javier Gómez', text: 'Hola, llamo para verificar si mantengo mi póliza si me traslado a vivir dos años a Italia.' },
+          { time: '00:25', speaker: 'Agente Active', text: 'Le confirmo que la cobertura de asistencia internacional se mantiene activa durante desplazamientos temporales.' }
+        ],
+        aiIntent: 'ASISTENCIA VIAJE / COBERTURA',
+        aiBullets: ['Emitido certificado en inglés.', 'Confirmada repatriación ilimitada.', 'Aclarada validez por traslado temporal.']
       },
       {
         id: 4,
@@ -587,18 +597,31 @@
         name: 'Lucía Fernández',
         dni: '31002938Y',
         sub: 'Tomador: Lucía Fernández | DNI: 31002938Y | Zona Andalucía (Sevilla)',
+        address: 'Calle Sierpes 8, 41004 Sevilla',
         mediator: 'Correduría Sur (#3319)',
         avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE INDIVIDUAL',
         policy1: 'Decesos & Asistencia: #ACT-30012',
         policy2: 'Orientación Médica 24h: Incluida',
-        tagColor: 'Otros [AI]',
-        subject: 'Duda sobre la actualización de la modalidad de prima mixta a nivelada',
+        tagColor: 'Modificación [AI]',
+        subject: 'Cambio de número IBAN de CaixaBank para cobro de recibos',
         date: '10:21',
         phone: '+34 622 901 223',
-        emailBody: 'Hola,<br><br>Querría informarme sobre la diferencia de cuota al pasar mi póliza de prima mixta a prima nivelada antes de mi próximo cumpleaños.<br><br>Gracias,<br><strong>Lucía Fernández</strong>',
-        waMessage: 'Hola! ¿Me podéis mandar el contacto de la clínica dental asociada en Sevilla?',
-        waReply: '¡Hola Lucía! En Sevilla tienes disponible la Clínica Dental Dentalia en la C/ Sierpes, 12.'
+        emailBody: 'Hola,<br><br>Les escribo para facilitar el nuevo IBAN de mi cuenta en CaixaBank para la domiciliación de los recibos de mi póliza individual.<br><br>Gracias,<br><strong>Lucía Fernández</strong>',
+        waMessage: '¡Hola! ¿Me podéis indicar qué clínica odontológica concertada en Sevilla tiene servicio de urgencia 24h?',
+        waReply: '¡Hola Lucía! En Sevilla dispones de la Clínica Dental Sur en C/ Sierpes, 12 con atención prioritaria para asegurados de Active.',
+        callCode: 'Transcripción de IA #1000000000622',
+        callDuration: 'Español (España) | Duración: 00:52',
+        callTag: 'MODIFICACIÓN',
+        callRef: '#1~5869',
+        callDate: '11 Sep 08:59',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Active Seguros, buenos días.' },
+          { time: '00:06', speaker: 'Lucía Fernández', text: 'Hola, quería solicitar la modificación de la periodicidad de pago de trimestral a anual.' },
+          { time: '00:15', speaker: 'Agente Active', text: 'Perfecto Lucía, aplicando el pago anual obtendrá además un 3% de descuento en su próxima cuota.' }
+        ],
+        aiIntent: 'MODIFICACIÓN DE DATOS / IBAN',
+        aiBullets: ['Actualizada cuenta IBAN.', 'Cambiado pago a modalidad anual.', 'Aplicado descuento del 3%.']
       },
       {
         id: 5,
@@ -606,18 +629,31 @@
         name: 'Antonio Ruiz',
         dni: '71928301M',
         sub: 'Tomador: Antonio Ruiz | DNI: 71928301M | Zona Norte (Bilbao)',
+        address: 'Gran Vía 34, 2ºD, 48009 Bilbao',
         mediator: 'NorteSeguros Mediación (#5512)',
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE FAMILIAR',
         policy1: 'Decesos & Asistencia: #ACT-44910',
         policy2: 'Servicio Manitas Hogar: 3h/año',
         tagColor: 'Prioritario',
-        subject: 'Solicitud de fontanero para pequeña avería (Servicio Manitas)',
+        subject: 'Solicitud de fontanero para cambio de grifo en cocina (Manitas)',
         date: '10:19',
         phone: '+34 670 112 400',
-        emailBody: 'Buenos días,<br><br>Necesito solicitar la visita de un técnico para cambiar el grifo de la cocina haciendo uso del servicio manitas incluido en la póliza.<br><br>Un saludo,<br><strong>Antonio Ruiz</strong>',
+        emailBody: 'Buenos días,<br><br>Necesito solicitar la visita de un técnico fontanero para sustituir el grifo de la cocina haciendo uso de las horas de Manitas del Hogar incluidas en mi póliza.<br><br>Un saludo,<br><strong>Antonio Ruiz</strong>',
         waMessage: 'Hola, querría agendar la cita del manitas para este jueves por la mañana.',
-        waReply: 'Perfecto Antonio. Te confirmamos cita para este jueves entre las 10:00 y las 12:00h.'
+        waReply: 'Perfecto Antonio. Te confirmamos la cita para este jueves entre las 10:00 y las 12:00h.',
+        callCode: 'Transcripción de IA #1000000000711',
+        callDuration: 'Español (España) | Duración: 01:15',
+        callTag: 'ASISTENCIA HOGAR',
+        callRef: '#1~5111',
+        callDate: '31 Aug 12:21',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Active Seguros Asistencia Hogar, dígame.' },
+          { time: '00:08', speaker: 'Antonio Ruiz', text: 'Hola, llamaba para verificar si una pequeña fuga en la llave de paso la cubre el manitas o fontanería de urgencia.' },
+          { time: '00:18', speaker: 'Agente Active', text: 'Al tratarse de la llave de paso principal, lo enviamos como urgencia de fontanería sin coste de desplazamiento.' }
+        ],
+        aiIntent: 'ASISTENCIA HOGAR / MANITAS',
+        aiBullets: ['Solicitada visita de fontanero.', 'Confirmada cita para jueves mañana.', 'Cobertura 100% sin franquicia.']
       },
       {
         id: 6,
@@ -625,25 +661,37 @@
         name: 'Carmen Navarro',
         dni: '18273645Z',
         sub: 'Tomador: Carmen Navarro | DNI: 18273645Z | Gestoría & Herencias',
+        address: 'Calle Mayor 15, 1ºA, 28013 Madrid',
         mediator: 'Active Directo (#001)',
         avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
         tag: 'PÓLIZA ACTIVE SENIOR',
         policy1: 'Decesos & Asistencia: #ACT-88201',
         policy2: 'Borrado Digital & Herencia: Incluido',
-        tagColor: 'Reserva: Consulta [AI]',
-        subject: 'Consulta sobre el borrado de huella digital y redes sociales',
+        tagColor: 'Consulta [AI]',
+        subject: 'Consulta sobre cancelación de perfiles en redes sociales (Borrado Digital)',
         date: '09:52',
         phone: '+34 633 440 192',
-        emailBody: 'Estimados gestores,<br><br>Me gustaría consultar cómo funciona la cobertura del borrado de huella digital que indica mi seguro Active.<br><br>Muchas gracias,<br><strong>Carmen Navarro</strong>',
-        waMessage: 'Hola, ¿la gestoría me puede ayudar también con las gestiones de jubilación?',
-        waReply: 'Hola Carmen. Sí, nuestro departamento de asesoramiento jurídico orienta en todos esos trámites.'
+        emailBody: 'Estimados gestores,<br><br>Me gustaría consultar el procedimiento para el borrado de huella digital y cancelación de perfiles en redes sociales que incluye mi cobertura Senior.<br><br>Muchas gracias,<br><strong>Carmen Navarro</strong>',
+        waMessage: 'Hola, ¿el equipo jurídico me ayuda también con el papeleo de la pensión de jubilación?',
+        waReply: 'Hola Carmen. Sí, nuestro departamento de asesoramiento jurídico orienta a los asegurados en todos los trámites de jubilación e invalidez.',
+        callCode: 'Transcripción de IA #1000000000840',
+        callDuration: 'Español (España) | Duración: 01:45',
+        callTag: 'GESTORÍA / HERENCIA',
+        callRef: '#1~4548',
+        callDate: '30 Jul 12:21',
+        transcript: [
+          { time: '00:00', speaker: 'Agente Active', text: 'Departamento de Gestoría Active, le atiende Silvia.' },
+          { time: '00:10', speaker: 'Carmen Navarro', text: 'Hola Silvia, quería agendar una cita previa para planificar el cuaderno particional de herencia.' },
+          { time: '00:22', speaker: 'Agente Active', text: 'Con mucho gusto Doña Carmen, le asignamos un letrado especializado de nuestra red jurídica.' }
+        ],
+        aiIntent: 'GESTORÍA / HERENCIA Y BORRADO',
+        aiBullets: ['Solicitado borrado digital.', 'Asignada cita con abogado especialista.', 'Orientación en trámites de jubilación.']
       }
     ];
 
     let currentClients = [...clientsData];
     let selectedClient = clientsData[0];
 
-    // RENDERIZAR LISTA DE TICKETS
     function renderTickets() {
       const listContainer = document.getElementById('ticketList');
       listContainer.innerHTML = '';
@@ -653,11 +701,14 @@
         const card = document.createElement('div');
         card.className = `p-2.5 border-b border-gray-100 hover:bg-blue-50/50 cursor-pointer transition ${isSelected ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''}`;
         
-        let tagBg = 'bg-lime-400 text-gray-900';
-        if (client.tagColor.includes('Prioritario')) tagBg = 'bg-amber-400 text-amber-950';
-        if (client.tagColor.includes('Asistencia')) tagBg = 'bg-blue-500 text-white';
+        let tagBg = 'bg-blue-100 text-blue-800 border border-blue-300';
+        if (client.tagColor.includes('Contratación')) tagBg = 'bg-emerald-100 text-emerald-800 border border-emerald-300';
+        if (client.tagColor.includes('Baja')) tagBg = 'bg-rose-100 text-rose-800 border border-rose-300';
 
-        card.onclick = () => selectClient(client.id);
+        card.onclick = () => {
+          showClientDetail();
+          selectClient(client.id);
+        };
 
         card.innerHTML = `
           <div class="flex items-center space-x-2">
@@ -680,19 +731,18 @@
       });
     }
 
-    // SELECCIONAR CLIENTE DINO Y CAMBIAR TODO EL PANEL DERECHO
     function selectClient(id) {
       selectedClient = clientsData.find(c => c.id === id);
       renderTickets();
 
-      // Actualizar Header Ficha 360
+      // Header Ficha 360
       document.getElementById('clientAvatar').src = selectedClient.avatar;
       document.getElementById('clientName').innerText = selectedClient.name;
       document.getElementById('clientTag').innerText = selectedClient.tag;
       document.getElementById('clientSub').innerText = selectedClient.sub;
       document.getElementById('clientMediator').innerHTML = `<i class="fa-solid fa-briefcase text-gray-400 mr-1"></i>Mediador: ${selectedClient.mediator}`;
       
-      // Actualizar Pólizas CRM
+      // CRM Pólizas
       document.getElementById('clientPolicies').innerHTML = `
         <div class="flex justify-between items-center space-x-2 bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
           <span class="font-semibold">Decesos & Asistencia:</span>
@@ -704,87 +754,91 @@
         </div>
       `;
 
-      // Actualizar Tab Email
+      // Tab Email
       document.getElementById('emailBadge').innerText = selectedClient.tagColor;
       document.getElementById('emailSubject').innerText = selectedClient.subject;
       document.getElementById('emailSender').innerText = selectedClient.name;
       document.getElementById('emailBody').innerHTML = selectedClient.emailBody;
 
-      // Actualizar Tab WhatsApp
+      // Tab WhatsApp
       document.getElementById('waPhone').innerText = selectedClient.phone;
       document.getElementById('waClient').innerText = selectedClient.name;
       document.getElementById('waSenderName').innerText = selectedClient.name;
       document.getElementById('waText1').innerText = selectedClient.waMessage;
       document.getElementById('waText2').innerText = selectedClient.waReply;
 
-      // Actualizar Tab Llamada
-      document.getElementById('callClientName').innerText = `${selectedClient.name}:`;
+      // Tab Llamada / IA
+      document.getElementById('callCode').innerText = selectedClient.callCode;
+      document.getElementById('callDuration').innerText = selectedClient.callDuration;
+      
+      const transcriptBox = document.getElementById('callTranscript');
+      transcriptBox.innerHTML = '';
+      selectedClient.transcript.forEach(t => {
+        transcriptBox.innerHTML += `
+          <div class="flex space-x-2">
+            <span class="font-mono text-blue-600 text-[10px]">${t.time}</span>
+            <p><strong>${t.speaker}:</strong> ${t.text}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('aiIntent').innerText = selectedClient.aiIntent;
+      
+      const bulletsBox = document.getElementById('aiBullets');
+      bulletsBox.innerHTML = '';
+      selectedClient.aiBullets.forEach(b => {
+        bulletsBox.innerHTML += `<li>${b}</li>`;
+      });
     }
 
-    // FILTRAR POR CARPETAS
-    function filterFolder(folder) {
-      if (folder === 'all') {
-        currentClients = [...clientsData];
-      } else {
-        currentClients = clientsData.filter(c => c.folder === folder);
-      }
-      if (currentClients.length > 0) {
-        selectedClient = currentClients[0];
-      }
-      renderTickets();
-      if (currentClients.length > 0) {
-        selectClient(selectedClient.id);
-      }
+    function renderCtiCallHistory() {
+      const list = document.getElementById('ctiCallHistoryList');
+      list.innerHTML = '';
+
+      clientsData.forEach(client => {
+        const item = document.createElement('div');
+        item.className = "p-2 hover:bg-blue-100/70 cursor-pointer flex items-center justify-between transition border-l-2 border-transparent hover:border-blue-600";
+        item.onclick = () => selectCallRecord(client.id);
+
+        item.innerHTML = `
+          <div class="flex items-center space-x-2.5">
+            <img src="${client.avatar}" class="w-7 h-7 rounded-full object-cover border border-blue-400">
+            <div>
+              <div class="flex items-center space-x-1">
+                <span class="font-bold text-gray-800 text-[11px]">${client.name}</span>
+                <span class="bg-blue-100 text-blue-800 text-[9px] px-1 rounded font-semibold">${client.dni}</span>
+              </div>
+              <p class="text-gray-500 text-[10px] font-mono mt-0.5">
+                <i class="fa-solid fa-phone text-green-600 mr-1"></i>${client.phone}
+              </p>
+            </div>
+          </div>
+          <div class="text-right text-[10px]">
+            <span class="bg-green-100 text-green-800 font-bold text-[9px] px-1.5 py-0.5 rounded block mb-0.5">${client.callTag}</span>
+            <span class="text-gray-400 font-mono block">${client.callDate}</span>
+          </div>
+        `;
+        list.appendChild(item);
+      });
     }
 
-    // CAMBIAR PESTAÑAS (EMAIL, WHATSAPP, CALL)
-    function switchTab(tab) {
-      document.getElementById('view-email').classList.add('hidden');
-      document.getElementById('view-whatsapp').classList.add('hidden');
-      document.getElementById('view-call').classList.add('hidden');
-
-      document.getElementById('tab-email').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
-      document.getElementById('tab-whatsapp').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
-      document.getElementById('tab-call').className = "px-4 py-2 text-gray-600 hover:text-black flex items-center space-x-1.5 font-medium";
-
-      if (tab === 'email') {
-        document.getElementById('view-email').classList.remove('hidden');
-        document.getElementById('tab-email').className = "px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5";
-      } else if (tab === 'whatsapp') {
-        document.getElementById('view-whatsapp').classList.remove('hidden');
-        document.getElementById('tab-whatsapp').className = "px-4 py-2 font-bold text-green-600 border-b-2 border-green-600 flex items-center space-x-1.5";
-      } else if (tab === 'call') {
-        document.getElementById('view-call').classList.remove('hidden');
-        document.getElementById('tab-call').className = "px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600 flex items-center space-x-1.5";
-      }
+    function selectCallRecord(clientId) {
+      showClientDetail();
+      selectClient(clientId);
+      switchTab('call');
+      toggleCallHistoryModal();
     }
 
-    // BORRADOR IA AGENT ASSIST
-    function insertAiResponse() {
-      const textarea = document.getElementById('replyBox');
-      textarea.value = `Estimado/a ${selectedClient.name},\n\nLe confirmamos que su póliza de Active Seguros contempla plenamente su solicitud. Hemos procedido a gestionar los trámites requeridos con la red de mediación.\n\nAtentamente,\nAtención al Cliente - Active Seguros`;
-    }
-
-    // TOGGLE SOFTPHONE CTI
-    function toggleCTIModal() {
-      const modal = document.getElementById('ctiModal');
-      modal.classList.toggle('hidden');
-    }
-
-    // SIMULADOR AUDIO
     let isPlaying = false;
     function playSimulatedAudio() {
       const icon = document.getElementById('playIcon');
       isPlaying = !isPlaying;
-      if (isPlaying) {
-        icon.className = "fa-solid fa-pause text-xs";
-      } else {
-        icon.className = "fa-solid fa-play text-xs";
-      }
+      icon.className = isPlaying ? "fa-solid fa-pause text-xs" : "fa-solid fa-play text-xs";
     }
 
     // INIT
     renderTickets();
+    renderCtiCallHistory();
     selectClient(1);
   </script>
 </body>
